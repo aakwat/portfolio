@@ -26,3 +26,4 @@ pnpm deploy    # build, then wrangler deploy
 ```
 
 `wrangler` comes from the Nix shell, not npm: npm's `workerd` binary does not run on NixOS.
+
