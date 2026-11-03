@@ -1,0 +1,41 @@
+---
+import { profile } from "../lib/profile";
+
+interface Props {
+  title: string;
+  description?: string;
+  // Error pages must not be indexed or claim a canonical URL.
+  noindex?: boolean;
+}
+
+const { title, description = profile.description, noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  jobTitle: profile.role,
+  url: Astro.site?.href,
+  sameAs: [profile.github, profile.linkedin],
+};
+---
+
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{title}</title>
+<meta name="description" content={description} />
+{
+  noindex ? (
+    <meta name="robots" content="noindex" />
+  ) : (
+    <>
+      <link rel="canonical" href={canonical} />
+      <meta property="og:type" content="profile" />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={canonical} />
+      <meta name="twitter:card" content="summary" />
+      <script type="application/ld+json" set:html={JSON.stringify(person)} />
+    </>
+  )
+}

@@ -1,0 +1,26 @@
+# nix / direnv
+.direnv/
+result
+result-*
+
+# secrets
+.env
+.env.local
+
+# node
+node_modules/
+.pnpm-store/
+
+# build
+.next/
+out/
+dist/
+*.tsbuildinfo
+.turbo/
+
+# test
+coverage/
+
+# astro / wrangler
+.astro/
+.wrangler/

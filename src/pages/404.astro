@@ -1,0 +1,17 @@
+---
+import Head from "../components/Head.astro";
+import { profile } from "../lib/profile";
+import "../styles/global.css";
+---
+
+<html lang="en">
+  <head>
+    <Head title={`Not found — ${profile.name}`} noindex />
+  </head>
+  <body>
+    <main>
+      <h1>Page not found</h1>
+      <p><a href="/">Back home</a></p>
+    </main>
+  </body>
+</html>

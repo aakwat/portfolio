@@ -1,0 +1,4 @@
+Contact: mailto:toyko2001@gmail.com
+Expires: 2027-11-03T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://me.aungkokolwin.workers.dev/.well-known/security.txt

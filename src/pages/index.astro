@@ -1,0 +1,31 @@
+---
+import Head from "../components/Head.astro";
+import { profile } from "../lib/profile";
+import "../styles/global.css";
+
+const links = [
+  { label: "Resume (PDF)", href: "/resume.pdf" },
+  { label: "GitHub", href: profile.github },
+  { label: "LinkedIn", href: profile.linkedin },
+  { label: "Email", href: `mailto:${profile.email}` },
+];
+---
+
+<html lang="en">
+  <head>
+    <Head title={`${profile.name} — ${profile.role}`} />
+  </head>
+  <body>
+    <main>
+      <h1>{profile.name}</h1>
+      <p>
+        Full-stack software engineer with 4+ years of experience building web
+        applications with React, Next.js and TypeScript, and Node.js/Express and
+        Java Spring Boot on the back end.
+      </p>
+      <ul>
+        {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+      </ul>
+    </main>
+  </body>
+</html>
