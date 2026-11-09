@@ -21,9 +21,8 @@ const links = [
     display: flex;
     align-items: center;
     gap: 1rem;
-    max-width: 75rem;
-    margin: 0 auto;
-    padding: 1rem 1.25rem;
+    /* Full width so the name lines up with the hero's first column. */
+    padding: 1rem 1.5rem;
   }
   .brand {
     margin-right: auto;
@@ -38,6 +37,10 @@ const links = [
     gap: 1.5rem;
     font-size: 0.875rem;
   }
+  .brand,
+  nav a {
+    white-space: nowrap;
+  }
   nav a {
     color: var(--muted);
     text-decoration: none;
@@ -46,7 +49,7 @@ const links = [
   nav a:focus-visible {
     color: var(--fg);
   }
-  .cta {
+  nav .cta {
     display: inline-flex;
     align-items: center;
     min-height: 40px;
@@ -55,9 +58,10 @@ const links = [
     border-radius: var(--radius-control);
     color: var(--fg);
   }
+  /* Phones keep name and button only; the hero repeats resume and profile links. */
   @media (max-width: 30rem) {
-    nav {
-      gap: 1rem;
+    nav a:not(.cta) {
+      display: none;
     }
   }
 </style>
