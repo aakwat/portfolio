@@ -1,0 +1,26 @@
+/* Mono palette: neutral base, the accent is ink itself. Light and dark follow the system. */
+:root {
+  color-scheme: light dark;
+  --bg: #fafafa;
+  --card: #ffffff;
+  --line: #e4e4e7;
+  --fg: #09090b;
+  --muted: #71717a;
+  --accent: #09090b;
+  --on-accent: #ffffff;
+
+  --radius-control: 10px;
+  --radius-card: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0b0c;
+    --card: #161618;
+    --line: #26262a;
+    --fg: #f4f4f5;
+    --muted: #a1a1aa;
+    --accent: #f4f4f5;
+    --on-accent: #0b0b0c;
+  }
+}

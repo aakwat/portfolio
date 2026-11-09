@@ -1,9 +1,16 @@
-:root {
-  color-scheme: light dark;
+@import "./tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
   font-family: system-ui, sans-serif;
   line-height: 1.6;
 }
-body {
+main {
   max-width: 40rem;
   margin: 4rem auto;
   padding: 0 1.25rem;
