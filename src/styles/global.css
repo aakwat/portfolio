@@ -10,7 +10,7 @@ body {
   font-family: system-ui, sans-serif;
   line-height: 1.6;
 }
-main {
+.narrow {
   max-width: 40rem;
   margin: 4rem auto;
   padding: 0 1.25rem;
