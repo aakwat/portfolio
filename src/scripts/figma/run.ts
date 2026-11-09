@@ -1,14 +1,17 @@
 import { createCast, dismiss } from "./cast";
+import { heroScene } from "./scenes/hero";
 import { navScene } from "./scenes/nav";
 
 const root = document.documentElement;
 
 async function play(): Promise<void> {
   const nav = document.querySelector<HTMLElement>('[data-fb-scene="nav"]');
-  if (!nav) return;
+  const hero = document.querySelector<HTMLElement>('[data-fb-scene="hero"]');
+  if (!nav && !hero) return;
   const cast = createCast();
   try {
-    await navScene(nav, cast);
+    // Both scenes build at once, like a team working in one file.
+    await Promise.all([nav ? navScene(nav, cast) : null, hero ? heroScene(hero, cast) : null]);
   } finally {
     await dismiss(cast);
   }

@@ -25,6 +25,11 @@ export function rectOf(el: Element): Rect {
   return { x: r.left + window.scrollX, y: r.top + window.scrollY, w: r.width, h: r.height };
 }
 
+// False for layers hidden at this screen size (display: none), which cursors should skip.
+export function isRendered(el: Element): boolean {
+  return el.getClientRects().length > 0;
+}
+
 export function place(el: HTMLElement, r: Rect, pad = 0): void {
   el.style.left = `${r.x - pad}px`;
   el.style.top = `${r.y - pad}px`;

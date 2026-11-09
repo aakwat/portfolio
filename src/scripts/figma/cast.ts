@@ -8,6 +8,9 @@ export interface Cast {
   design: Cursor;
   dev: Cursor;
   roamers: Cursor[];
+  brand: Cursor;
+  art: Cursor;
+  copy: Cursor;
 }
 
 function pick<T>(list: readonly T[]): T {
@@ -18,14 +21,22 @@ function pick<T>(list: readonly T[]): T {
 
 // Cursors enter from the bottom edge of what the visitor can see.
 export function createCast(): Cast {
-  const [aung, design, dev, qa, motion] = PEOPLE;
+  const [aung, design, dev, qa, motion, brand, art, copy] = PEOPLE;
   const enter = (person: (typeof PEOPLE)[number]): Cursor =>
     new Cursor(person, window.scrollX + Math.random() * window.innerWidth, window.scrollY + window.innerHeight - 40);
-  return { lead: enter(aung), design: enter(design), dev: enter(dev), roamers: [enter(qa), enter(motion)] };
+  return {
+    lead: enter(aung),
+    design: enter(design),
+    dev: enter(dev),
+    roamers: [enter(qa), enter(motion)],
+    brand: enter(brand),
+    art: enter(art),
+    copy: enter(copy),
+  };
 }
 
 export function everyone(cast: Cast): Cursor[] {
-  return [cast.lead, cast.design, cast.dev, ...cast.roamers];
+  return [cast.lead, cast.design, cast.dev, ...cast.roamers, cast.brand, cast.art, cast.copy];
 }
 
 // Background collaborators: drift to whatever is on the canvas, sometimes select it or leave a note.

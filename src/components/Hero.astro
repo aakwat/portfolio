@@ -2,8 +2,8 @@
 import { profile } from "../lib/profile";
 ---
 
-<section class="hero" aria-labelledby="hero-name">
-  <div class="col"><span class="glyph" aria-hidden="true">A</span></div>
+<section class="hero" aria-labelledby="hero-name" data-fb-scene="hero">
+  <div class="col"><span class="glyph" aria-hidden="true" data-fb="glyph" data-fb-name="Letter A">A</span></div>
   <div class="col photo-col">
     <img
       class="photo"
@@ -13,21 +13,22 @@ import { profile } from "../lib/profile";
       height="640"
       fetchpriority="high"
       decoding="async"
+      data-fb="photo"
     />
-    <span class="glyph" aria-hidden="true">U</span>
-    <p class="hello">Hello, I'm Aung</p>
+    <span class="glyph" aria-hidden="true" data-fb="glyph" data-fb-name="Letter U">U</span>
+    <p class="hello" data-fb="hello" data-fb-name="Greeting">Hello, I'm Aung</p>
   </div>
-  <div class="col"><span class="glyph" aria-hidden="true">N</span></div>
+  <div class="col"><span class="glyph" aria-hidden="true" data-fb="glyph" data-fb-name="Letter N">N</span></div>
   <div class="col">
-    <span class="glyph" aria-hidden="true">G</span>
-    <small class="copy">© 2026 {profile.name}</small>
+    <span class="glyph" aria-hidden="true" data-fb="glyph" data-fb-name="Letter G">G</span>
+    <small class="copy" data-fb="copyright" data-fb-name="Copyright">© 2026 {profile.name}</small>
   </div>
 
   <div class="caption">
-    <p class="wave" aria-hidden="true"><span>A</span><span>U</span><span>N</span><span>G</span></p>
-    <h1 id="hero-name">{profile.name}</h1>
-    <p>{profile.summary}</p>
-    <a href="/resume.pdf">View resume <span aria-hidden="true">↙</span></a>
+    <p class="wave" aria-hidden="true" data-fb="wave" data-fb-name="AUNG"><span>A</span><span>U</span><span>N</span><span>G</span></p>
+    <h1 id="hero-name" data-fb="name" data-fb-name="Name">{profile.name}</h1>
+    <p data-fb="summary" data-fb-name="Summary">{profile.summary}</p>
+    <a href="/resume.pdf" data-fb="link" data-fb-name="Link">View resume <span aria-hidden="true">↙</span></a>
   </div>
 </section>
 

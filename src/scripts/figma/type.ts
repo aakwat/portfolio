@@ -1,6 +1,7 @@
-// Real typing pace, deliberately not scaled by SPEED: faster than this reads as a fade.
+// Real typing pace, deliberately not scaled by SPEED. Long copy types quicker so a paragraph
+// takes about 1.5 s; much below ~10 ms a letter it stops reading as typing.
 const SHORT_MS = 55;
-const LONG_MS = 28;
+const LONG_MS = 11;
 
 const wait = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 

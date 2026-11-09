@@ -19,6 +19,24 @@ body {
 .fb-tone-green { --fb: #14ae5c; }
 .fb-tone-yellow { --fb: #ffc700; --fb-on: #000; }
 .fb-tone-pink { --fb: #ff24bd; }
+.fb-tone-teal { --fb: #1bc4b4; }
+.fb-tone-red { --fb: #f24822; }
+.fb-tone-coral { --fb: #ff7262; }
+
+/* Image frame being drawn before the photo lands. */
+.fb-ph {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #2c2c2c;
+  color: #9a9a9a;
+  font: 600 12px/1 system-ui, sans-serif;
+  transition: opacity 0.45s;
+}
+.fb-fade {
+  opacity: 0;
+}
 
 .fb-hover,
 .fb-box {

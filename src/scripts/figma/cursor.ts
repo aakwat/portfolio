@@ -36,10 +36,11 @@ export class Cursor {
     layer().append(this.el);
     this.x = x;
     this.y = y;
-    this.set(x, y);
+    this.at(x, y);
   }
 
-  private set(x: number, y: number): void {
+  // Jumps without easing; scenes call it every frame when the cursor drags something.
+  at(x: number, y: number): void {
     this.x = x;
     this.y = y;
     this.el.style.transform = `translate(${x}px, ${y}px)`;
@@ -56,7 +57,7 @@ export class Cursor {
     const cy = y0 + dy / 2 + dx * bend;
     return tween(ms ?? 380 + Math.hypot(dx, dy) * 0.9, (e) => {
       const u = 1 - e;
-      this.set(u * u * x0 + 2 * u * e * cx + e * e * x, u * u * y0 + 2 * u * e * cy + e * e * y);
+      this.at(u * u * x0 + 2 * u * e * cx + e * e * x, u * u * y0 + 2 * u * e * cy + e * e * y);
     });
   }
 
@@ -70,6 +71,11 @@ export class Cursor {
     await sleep(110);
     this.el.classList.remove("fb-down");
     await sleep(90);
+  }
+
+  // Pressed look while dragging out a frame.
+  hold(pressed: boolean): void {
+    this.el.classList.toggle("fb-down", pressed);
   }
 
   async chat(text: string, ms = 1200): Promise<void> {
