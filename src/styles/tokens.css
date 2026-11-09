@@ -11,6 +11,9 @@
 
   --radius-control: 10px;
   --radius-card: 20px;
+
+  /* Widest the page content gets; the header stays full width. */
+  --page-max: 80rem;
 }
 
 @media (prefers-color-scheme: dark) {

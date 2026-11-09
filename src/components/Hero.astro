@@ -38,8 +38,9 @@ import { profile } from "../lib/profile";
     container-type: inline-size;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    max-width: var(--page-max);
+    margin: 0 auto;
     height: clamp(34rem, calc(100svh - 4.5rem), 48rem);
-    border-top: 1px solid var(--line);
     /* One letter size for glyphs and caption placement; capped so wide screens can't overflow the height. */
     --glyph: min(25cqw, 17rem);
     --serif: Didot, "Bodoni 72", "Bodoni Moda", "Playfair Display", "Noto Serif Display", "Noto Serif", Georgia, serif;
@@ -167,7 +168,6 @@ import { profile } from "../lib/profile";
     .hero {
       grid-template-columns: 1fr;
       height: auto;
-      border-top: 0;
     }
     .col:not(.photo-col),
     .photo-col .glyph,
