@@ -24,6 +24,7 @@ import { profile } from "../lib/profile";
   </div>
 
   <div class="caption">
+    <p class="wave" aria-hidden="true"><span>A</span><span>U</span><span>N</span><span>G</span></p>
     <h1 id="hero-name">{profile.name}</h1>
     <p>{profile.summary}</p>
     <a href="/resume.pdf">View resume <span aria-hidden="true">↙</span></a>
@@ -155,27 +156,51 @@ import { profile } from "../lib/profile";
     color: var(--fg);
   }
 
-  /* Phones: one panel, the photo with its U; the other letters would only be crumbs at this width. */
+  /* Phone-only small AUNG, in the same sine pattern as the desktop columns. */
+  .caption .wave {
+    display: none;
+  }
+
+  /* Phones: one clean photo fading into the page, with a frosted panel overlapping its lower part. */
   @media (max-width: 48rem) {
     .hero {
       grid-template-columns: 1fr;
       height: auto;
-      --glyph: 60cqw;
-      --y-u: 0.4;
+      border-top: 0;
     }
-    .col:not(.photo-col) {
+    .col:not(.photo-col),
+    .photo-col .glyph,
+    .hello {
       display: none;
     }
     .photo-col {
-      aspect-ratio: 0.85;
+      aspect-ratio: 0.78;
       border-left: 0;
     }
-    .caption {
-      position: static;
-      grid-column: 1 / -1;
-      width: auto;
-      padding: 1.5rem 1.25rem;
-      border-top: 1px solid var(--line);
+    .photo {
+      mask-image: linear-gradient(to bottom, #000 70%, transparent);
     }
+    .caption {
+      position: relative;
+      top: auto;
+      left: auto;
+      width: auto;
+      margin: -9rem 1rem 0;
+      padding: 1rem 1.25rem 0.5rem;
+      border: 1px solid color-mix(in srgb, var(--fg) 12%, transparent);
+      border-radius: var(--radius-card);
+      background: color-mix(in srgb, var(--bg) 55%, transparent);
+      backdrop-filter: blur(14px);
+    }
+    .caption .wave {
+      display: flex;
+      gap: 0.125rem;
+      margin: 0 0 1.75rem;
+      color: var(--fg);
+      font: 900 3rem/0.8 var(--serif);
+    }
+    .caption .wave span:nth-child(2) { transform: translateY(0.5rem); }
+    .caption .wave span:nth-child(3) { transform: translateY(-0.5rem); }
+    .caption .wave span:nth-child(4) { transform: translateY(1rem); }
   }
 </style>
