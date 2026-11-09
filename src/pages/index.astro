@@ -1,5 +1,7 @@
 ---
 import Head from "../components/Head.astro";
+import FigmaBuild from "../components/FigmaBuild.astro";
+import Nav from "../components/Nav.astro";
 import { profile } from "../lib/profile";
 import "../styles/global.css";
 
@@ -16,6 +18,7 @@ const links = [
     <Head title={`${profile.name} — ${profile.role}`} />
   </head>
   <body>
+    <Nav />
     <main>
       <h1>{profile.name}</h1>
       <p>
@@ -27,5 +30,6 @@ const links = [
         {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
       </ul>
     </main>
+    <FigmaBuild />
   </body>
 </html>

@@ -1,0 +1,136 @@
+/* Figma build-in overlay. Figma's own colours, independent of the site palette. */
+.fb-on [data-fb]:not(.fb-shown) {
+  visibility: hidden;
+}
+
+body {
+  position: relative;
+}
+.fb-layer {
+  position: absolute;
+  inset: 0;
+  overflow: clip;
+  pointer-events: none;
+  z-index: 50;
+}
+
+.fb-tone-blue { --fb: #0d99ff; }
+.fb-tone-purple { --fb: #9747ff; }
+.fb-tone-green { --fb: #14ae5c; }
+.fb-tone-yellow { --fb: #ffc700; --fb-on: #000; }
+.fb-tone-pink { --fb: #ff24bd; }
+
+.fb-hover,
+.fb-box {
+  position: absolute;
+  border: 1px solid var(--fb, #0d99ff);
+}
+.fb-handle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border: 1px solid var(--fb);
+}
+.fb-handle:nth-child(1) { left: -4px; top: -4px; }
+.fb-handle:nth-child(2) { right: -4px; top: -4px; }
+.fb-handle:nth-child(3) { left: -4px; bottom: -4px; }
+.fb-handle:nth-child(4) { right: -4px; bottom: -4px; }
+.fb-badge {
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 6px);
+  transform: translateX(-50%);
+  padding: 0 6px;
+  border-radius: 4px;
+  background: var(--fb);
+  color: #fff;
+  font: 500 11px/18px system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.fb-name {
+  position: absolute;
+  left: -1px;
+  bottom: 100%;
+  padding: 0 4px;
+  border-radius: 4px 4px 0 0;
+  background: var(--fb);
+  color: var(--fb-on, #fff);
+  font: 500 10px/16px system-ui, sans-serif;
+  white-space: nowrap;
+}
+.fb-mine .fb-name {
+  padding: 0;
+  background: none;
+  color: var(--fb);
+}
+
+.fb-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+  transition: opacity 0.3s;
+}
+.fb-cursor svg {
+  display: block;
+  transform-origin: 2px 2px;
+  transition: transform 0.08s;
+}
+.fb-cursor path {
+  fill: var(--fb);
+  stroke: #fff;
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+}
+.fb-down svg {
+  transform: scale(0.82);
+}
+.fb-leaving {
+  opacity: 0;
+}
+.fb-tag,
+.fb-chat {
+  position: absolute;
+  left: 14px;
+  top: 18px;
+  background: var(--fb);
+  color: var(--fb-on, #fff);
+  white-space: nowrap;
+}
+.fb-tag {
+  padding: 0 7px;
+  border-radius: 6px;
+  font: 500 11px/20px system-ui, sans-serif;
+  transition: opacity 0.2s;
+}
+.fb-chat {
+  padding: 6px 10px;
+  border-radius: 14px;
+  font: 500 13px/20px system-ui, sans-serif;
+  opacity: 0;
+  transform: scale(0.9);
+  transform-origin: 0 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.fb-chatting .fb-chat {
+  opacity: 1;
+  transform: none;
+}
+.fb-chatting .fb-tag {
+  opacity: 0;
+}
+
+.fb-caret {
+  display: inline-block;
+  width: 2px;
+  height: 0.9em;
+  margin-left: 1px;
+  background: #0d99ff;
+  vertical-align: -0.05em;
+  animation: fb-blink 0.9s steps(1) infinite;
+}
+@keyframes fb-blink {
+  50% { opacity: 0; }
+}

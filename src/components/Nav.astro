@@ -1,0 +1,63 @@
+---
+import { profile } from "../lib/profile";
+
+// Only links that resolve today; section anchors join as their sections ship.
+const links = [
+  { label: "Resume", href: "/resume.pdf" },
+  { label: "GitHub", href: profile.github },
+];
+---
+
+<header class="nav" data-fb-scene="nav">
+  <a class="brand" href="/" data-fb="brand" data-fb-name="Name">{profile.name}<span>.</span></a>
+  <nav aria-label="Main">
+    {links.map((link) => <a href={link.href} data-fb="link" data-fb-name={link.label}>{link.label}</a>)}
+    <a class="cta" href={`mailto:${profile.email}`} data-fb="cta" data-fb-name="Button">Let's talk</a>
+  </nav>
+</header>
+
+<style>
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 75rem;
+    margin: 0 auto;
+    padding: 1rem 1.25rem;
+  }
+  .brand {
+    margin-right: auto;
+    font-weight: 900;
+    font-size: 1.125rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  nav a:hover,
+  nav a:focus-visible {
+    color: var(--fg);
+  }
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-control);
+    color: var(--fg);
+  }
+  @media (max-width: 30rem) {
+    nav {
+      gap: 1rem;
+    }
+  }
+</style>
