@@ -9,7 +9,10 @@ body {
 .fb-layer {
   position: absolute;
   inset: 0;
-  overflow: clip;
+  /* Clip sideways only, so cursors never cause horizontal scroll; a tag below the last
+     content (the phone glass panel) still shows instead of being cut at the page end. */
+  overflow-x: clip;
+  overflow-y: visible;
   pointer-events: none;
   z-index: 50;
 }
