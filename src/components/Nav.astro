@@ -10,7 +10,7 @@ const links = [
 ---
 
 <header class="nav" data-fb-scene="nav" data-fb-name="Nav">
-  <a class="brand" href="/" data-fb="brand" data-fb-name="Name">{profile.name}<span>.</span></a>
+  <a class="brand" href="/" data-fb="brand" data-fb-name="Name"><span class="first">Aung</span><span class="rest">Koko Lwin</span></a>
   <nav aria-label="Main">
     {links.map((link) => <a href={link.href} data-fb="link" data-fb-name={link.label}>{link.label}</a>)}
     <button class="theme" type="button" aria-label="Switch theme" data-theme-toggle data-fb="toggle" data-fb-name="Theme">
@@ -29,12 +29,40 @@ const links = [
     padding: 1rem 1.5rem;
     border-bottom: 1px solid var(--line);
   }
+  /* Wordmark: bold serif first name, italic family name tucked under its right edge. */
   .brand {
+    display: inline-grid;
+    justify-items: end;
     margin-right: auto;
-    font-weight: 400;
-    font-size: 1.125rem;
-    letter-spacing: -0.02em;
+    border-radius: 4px;
+    color: var(--fg);
     text-decoration: none;
+    line-height: 1;
+  }
+  .first {
+    font-family: var(--serif);
+    font-size: 1.625rem;
+    font-weight: 900;
+    font-synthesis-weight: auto;
+    letter-spacing: -0.01em;
+    line-height: 0.85;
+  }
+  /* A little space so the tail of the g never touches the second line. */
+  .rest {
+    margin-top: 0.3rem;
+    font-family: Georgia, serif;
+    font-size: 0.6875rem;
+    font-style: italic;
+  }
+  .brand:focus-visible {
+    outline: 2px solid var(--fg);
+    outline-offset: 2px;
+  }
+  nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    font-size: 0.875rem;
   }
   .brand,
   nav a {
