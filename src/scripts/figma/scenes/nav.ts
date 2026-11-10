@@ -22,6 +22,7 @@ export async function navScene(nav: HTMLElement, cast: Cast): Promise<void> {
     for (const cta of find("cta")) {
       await build(cast.design, cta, { aim: { x: 0.15, y: 0.3 }, whileSelected: () => cast.design.chat("Button ready", 900) });
     }
+    for (const toggle of find("toggle")) await build(cast.design, toggle, { mine: true, aim: { x: 0.5, y: 0.5 } });
   };
 
   const dev = async (): Promise<void> => {
