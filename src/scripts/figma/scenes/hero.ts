@@ -1,5 +1,6 @@
 import { build, QUICK } from "../actions/build";
 import { copyAcross } from "../actions/copy";
+import { job } from "../actions/job";
 import { drawPhoto } from "../actions/photo";
 import { roam } from "../actions/roam";
 import type { Cast } from "../cast";
@@ -46,6 +47,6 @@ export async function heroScene(hero: HTMLElement, cast: Cast): Promise<void> {
     }
   };
 
-  await Promise.all([letters(), art(), copy()]);
+  await Promise.all([job(cast.brand, letters), job(cast.art, art), job(cast.copy, copy)]);
   await stopRoaming();
 }

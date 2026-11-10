@@ -32,7 +32,11 @@ export function roam(cursors: readonly Cursor[], area: Element, start = 300, sta
   let stopped = false;
   // Hidden layers (display: none on phones) have no position to wander to.
   const built = (): HTMLElement[] => [...area.querySelectorAll<HTMLElement>(".fb-shown")].filter(isRendered);
-  const runs = cursors.map((c, i) => sleep(start + i * stagger).then(() => wander(c, built, () => stopped)));
+  const runs = cursors.map((c, i) =>
+    sleep(start + i * stagger)
+      .then(() => wander(c, built, () => stopped))
+      .finally(() => c.leave()),
+  );
   return async () => {
     stopped = true;
     await Promise.all(runs);

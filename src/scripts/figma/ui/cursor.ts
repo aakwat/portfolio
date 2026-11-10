@@ -25,6 +25,7 @@ export class Cursor {
   private readonly node: HTMLElement;
   private readonly bubble: HTMLElement;
   private pos: Point;
+  private leaving: Promise<void> | null = null;
 
   constructor(person: Person, start: Point) {
     this.person = person;
@@ -86,9 +87,13 @@ export class Cursor {
     }
   }
 
-  async leave(): Promise<void> {
-    this.node.classList.add("fb-leaving");
-    await this.to({ x: this.pos.x + between(-60, 60), y: this.pos.y + 80 }, 500);
-    this.node.remove();
+  // Safe to call again: a cursor that already left just resolves.
+  leave(): Promise<void> {
+    this.leaving ??= (async () => {
+      this.node.classList.add("fb-leaving");
+      await this.to({ x: this.pos.x + between(-60, 60), y: this.pos.y + 80 }, 500);
+      this.node.remove();
+    })();
+    return this.leaving;
   }
 }

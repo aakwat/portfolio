@@ -1,5 +1,6 @@
 import { duplicateAndAlign } from "../actions/align";
 import { build, tap } from "../actions/build";
+import { job } from "../actions/job";
 import { roam } from "../actions/roam";
 import type { Cast } from "../cast";
 import { sleep } from "../dom/clock";
@@ -35,6 +36,6 @@ export async function navScene(nav: HTMLElement, cast: Cast): Promise<void> {
     }
   };
 
-  await Promise.all([lead(), design(), dev()]);
+  await Promise.all([job(cast.lead, lead), job(cast.design, design), job(cast.dev, dev)]);
   await stopRoaming();
 }
