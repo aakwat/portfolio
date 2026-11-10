@@ -1,0 +1,106 @@
+---
+import { projects } from "../lib/projects";
+import ProjectInfo from "./ProjectInfo.astro";
+import ProjectMedia from "./ProjectMedia.astro";
+
+const [featured, ...rest] = projects;
+---
+
+<section class="work" id="work" aria-labelledby="work-title">
+  <header class="head">
+    <h2 id="work-title">Work</h2>
+    <p>Things I have built, from first sketch to production.</p>
+  </header>
+
+  {
+    featured && (
+      <article class="feature">
+        <div class="frame">
+          <ProjectMedia media={featured.media} />
+        </div>
+        <ProjectInfo project={featured} featured />
+      </article>
+    )
+  }
+
+  <div class="grid">
+    {
+      rest.map((project) => (
+        <article>
+          <div class="frame">
+            <ProjectMedia media={project.media} />
+          </div>
+          <ProjectInfo project={project} />
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  import "../scripts/media";
+</script>
+
+<style>
+  .work {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 6rem 1.5rem 5rem;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: 2.5rem;
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-weight: 400;
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+  }
+  .head p {
+    max-width: 22rem;
+    margin: 0;
+    color: var(--muted);
+  }
+  .frame {
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--card);
+  }
+  .feature {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 3.5rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem 1.5rem;
+  }
+
+  @media (max-width: 60rem) {
+    .feature {
+      grid-template-columns: 1fr;
+    }
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 40rem) {
+    .work {
+      padding: 4rem 1rem 3rem;
+    }
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

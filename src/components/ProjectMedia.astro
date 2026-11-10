@@ -1,0 +1,55 @@
+---
+import type { Media } from "../lib/projects";
+
+interface Props {
+  media: Media;
+}
+
+const { media } = Astro.props;
+---
+
+{
+  media.kind === "video" ? (
+    // Muted, so browsers allow it to play; scripts/media.ts plays it only while it is on screen.
+    <video
+      class="media"
+      muted
+      loop
+      playsinline
+      preload="none"
+      poster={`/projects/${media.name}-poster.jpg`}
+      width={media.width}
+      height={media.height}
+      aria-hidden="true"
+      data-autoplay
+    >
+      <source src={`/projects/${media.name}.webm`} type="video/webm" />
+      <source src={`/projects/${media.name}.mp4`} type="video/mp4" />
+    </video>
+  ) : (
+    <img
+      class="media"
+      src={`/projects/${media.file}`}
+      alt={media.alt}
+      width={media.width}
+      height={media.height}
+      loading="lazy"
+      decoding="async"
+    />
+  )
+}
+
+<style>
+  .media {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Centre crop keeps each demo's action in view; portrait videos lose only their edges. */
+    object-position: center;
+  }
+  /* Screenshots keep their title bar, which sits at the top. */
+  img.media {
+    object-position: top;
+  }
+</style>
