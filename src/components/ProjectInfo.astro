@@ -9,7 +9,7 @@ interface Props {
 const { project, featured = false } = Astro.props;
 ---
 
-<div class:list={["info", { featured }]}>
+<div class:list={["info", { featured }]} data-fb="info" data-fb-name={project.name}>
   <h3>
     {project.name}
     {project.badge && <span class="badge">{project.badge}</span>}
@@ -37,13 +37,13 @@ const { project, featured = false } = Astro.props;
     align-items: center;
     gap: 0.5rem;
     margin: 1rem 0 0.25rem;
-    font-size: 1.5rem;
+    font-size: var(--text-md);
     font-weight: 400;
     line-height: 1.15;
   }
   .featured h3 {
     margin-top: 0;
-    font-size: 2rem;
+    font-size: var(--text-lg);
   }
   .badge {
     padding: 0.125rem 0.5rem;

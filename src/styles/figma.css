@@ -1,5 +1,14 @@
 /* Figma build-in overlay. Figma's own colours, independent of the site palette. */
-.fb-on [data-fb]:not(.fb-shown) {
+/* A scene's layers stay hidden until built, and all show once the scene is done (or failed). */
+.fb-on [data-fb-scene]:not([data-fb-done]) [data-fb]:not(.fb-shown) {
+  visibility: hidden;
+}
+/* A project card's border stays hidden until the first of its layers is built. */
+.fb-on [data-fb-scene]:not([data-fb-done]) [data-fb-box]:not(:has(.fb-shown)) {
+  visibility: hidden;
+}
+/* A media frame's box stays hidden too, until its image or video is dropped in.*/
+.fb-on [data-fb-scene]:not([data-fb-done]) [data-fb-frame]:has(> [data-fb]:not(.fb-shown)) {
   visibility: hidden;
 }
 
@@ -230,3 +239,9 @@ body {
 .fb-ico-distribute i:nth-child(1) { left: 5px; }
 .fb-ico-distribute i:nth-child(2) { left: 11px; }
 .fb-ico-distribute i:nth-child(3) { left: 17px; }
+
+/* A whole-card copy while it is Alt-dragged to the next slot. */
+.fb-card-ghost {
+  position: absolute;
+  margin: 0;
+}

@@ -16,6 +16,13 @@
   /* Display serif for the A U N G letters only; no web font is downloaded. */
   --serif: Didot, "Bodoni 72", "Bodoni Moda", "Playfair Display", "Noto Serif Display", "Noto Serif", Georgia, serif;
 
+  /* Type scale, smallest to largest; headings rank section > project > name, and grow gently with the screen. */
+  --text-xs: 0.75rem;
+  --text-sm: 0.9375rem;
+  --text-md: 1.25rem;
+  --text-lg: clamp(1.375rem, 1.2rem + 0.6vw, 1.75rem);
+  --text-xl: clamp(2rem, 1.5rem + 2vw, 3rem);
+
   /* Widest the page content gets; the header stays full width. */
   --page-max: 80rem;
 }

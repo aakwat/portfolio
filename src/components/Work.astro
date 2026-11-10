@@ -6,17 +6,17 @@ import ProjectMedia from "./ProjectMedia.astro";
 const [featured, ...rest] = projects;
 ---
 
-<section class="work" id="work" aria-labelledby="work-title">
+<section class="work" id="work" aria-labelledby="work-title" data-fb-scene="work" data-fb-name="Work">
   <header class="head">
-    <h2 id="work-title">Work</h2>
-    <p>Things I have built, from first sketch to production.</p>
+    <h2 id="work-title" data-fb="heading" data-fb-name="Heading">Work</h2>
+    <p data-fb="intro" data-fb-name="Intro">Things I have built, from first sketch to production.</p>
   </header>
 
   {
     featured && (
-      <article class="feature">
-        <div class="frame">
-          <ProjectMedia media={featured.media} />
+      <article class="card feature" data-fb-box>
+        <div class="frame" data-fb-frame>
+          <ProjectMedia media={featured.media} label={featured.name} />
         </div>
         <ProjectInfo project={featured} featured />
       </article>
@@ -26,9 +26,9 @@ const [featured, ...rest] = projects;
   <div class="grid">
     {
       rest.map((project) => (
-        <article>
-          <div class="frame">
-            <ProjectMedia media={project.media} />
+        <article class="card" data-fb-box data-fb-card data-fb-name={project.name}>
+          <div class="frame" data-fb-frame>
+            <ProjectMedia media={project.media} label={project.name} />
           </div>
           <ProjectInfo project={project} />
         </article>
@@ -57,9 +57,9 @@ const [featured, ...rest] = projects;
   }
   h2 {
     margin: 0;
-    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-size: var(--text-xl);
     font-weight: 400;
-    line-height: 0.85;
+    line-height: 1;
     letter-spacing: -0.02em;
   }
   .head p {
@@ -67,24 +67,34 @@ const [featured, ...rest] = projects;
     margin: 0;
     color: var(--muted);
   }
+  /* Each project sits in a bordered card; the media inside uses a smaller radius so the corners nest. */
+  .card {
+    padding: 0.75rem 0.75rem 1.25rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    background: var(--card);
+  }
   .frame {
     overflow: hidden;
     aspect-ratio: 16 / 10;
     border: 1px solid var(--line);
-    border-radius: var(--radius-card);
-    background: var(--card);
+    border-radius: 12px;
+    background: var(--bg);
+  }
+  .card :global(.info) {
+    padding: 0 0.5rem;
   }
   .feature {
     display: grid;
     grid-template-columns: 1.4fr 1fr;
     gap: 2rem;
     align-items: center;
-    margin-bottom: 3.5rem;
+    margin-bottom: 1.5rem;
   }
   .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem 1.5rem;
+    gap: 1.5rem;
   }
 
   @media (max-width: 60rem) {

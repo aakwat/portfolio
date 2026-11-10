@@ -33,7 +33,7 @@ export async function heroScene(hero: HTMLElement, cast: Cast): Promise<void> {
   const art = async (): Promise<void> => {
     await sleep(400);
     try {
-      for (const photo of find("photo")) await drawPhoto(cast.art, photo);
+      for (const photo of find("photo")) await drawPhoto(cast.art, photo, "Dropping the photo in");
     } finally {
       photoLanded.resolve();
     }
