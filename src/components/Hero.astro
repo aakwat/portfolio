@@ -47,7 +47,6 @@ const year = new Date().getFullYear();
     height: clamp(34rem, calc(100svh - 4.5rem), 48rem);
     /* One letter size for glyphs and caption placement; capped so wide screens can't overflow the height. */
     --glyph: min(25cqw, 17rem);
-    --serif: Didot, "Bodoni 72", "Bodoni Moda", "Playfair Display", "Noto Serif Display", "Noto Serif", Georgia, serif;
     /* Letter height inside its column: 0 touches the top, 1 touches the bottom. */
     --box: calc(var(--glyph) * 0.8);
     --y-a: 0.5;
@@ -72,6 +71,8 @@ const year = new Date().getFullYear();
     font-family: var(--serif);
     font-size: var(--glyph);
     font-weight: 900;
+    /* The A U N G letters keep their own serif and its real bold. */
+    font-synthesis-weight: auto;
     line-height: 0.8;
     text-align: center;
     user-select: none;
@@ -104,7 +105,8 @@ const year = new Date().getFullYear();
     margin: 0;
     padding: 0 1rem;
     color: #fff;
-    font: 600 0.75rem/1.4 system-ui, sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.4;
     letter-spacing: 0.08em;
     text-align: center;
     text-transform: uppercase;
@@ -134,9 +136,8 @@ const year = new Date().getFullYear();
   /* Name: the clearest line in the caption, but small next to the giant letters. */
   h1 {
     margin: 0 0 0.375rem;
-    font-family: var(--serif);
     font-size: 1.25rem;
-    font-weight: 900;
+    font-weight: 400;
     line-height: 1.2;
   }
   .caption p {
@@ -203,6 +204,7 @@ const year = new Date().getFullYear();
       margin: 0 0 1.75rem;
       color: var(--fg);
       font: 900 3rem/0.8 var(--serif);
+      font-synthesis-weight: auto;
     }
     .caption .wave span:nth-child(2) { transform: translateY(0.5rem); }
     .caption .wave span:nth-child(3) { transform: translateY(-0.5rem); }

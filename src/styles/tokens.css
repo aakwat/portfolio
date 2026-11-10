@@ -11,6 +11,10 @@
 
   --radius-control: 10px;
   --radius-card: 20px;
+  /* Site font, self-hosted (assets/fonts, SIL OFL). It has one weight, so text never asks for bold. */
+  --font: "Young Serif", Georgia, serif;
+  /* Display serif for the A U N G letters only; no web font is downloaded. */
+  --serif: Didot, "Bodoni 72", "Bodoni Moda", "Playfair Display", "Noto Serif Display", "Noto Serif", Georgia, serif;
 
   /* Widest the page content gets; the header stays full width. */
   --page-max: 80rem;
