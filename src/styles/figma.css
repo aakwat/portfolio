@@ -22,6 +22,10 @@ body {
 .fb-tone-teal { --fb: #1bc4b4; }
 .fb-tone-red { --fb: #f24822; }
 .fb-tone-coral { --fb: #ff7262; }
+.fb-tone-indigo { --fb: #7b61ff; }
+.fb-tone-cyan { --fb: #22d3ee; --fb-on: #000; }
+.fb-tone-lime { --fb: #a3e635; --fb-on: #000; }
+.fb-tone-orange { --fb: #f59e0b; --fb-on: #000; }
 
 /* Image frame being drawn before the photo lands. */
 .fb-ph {

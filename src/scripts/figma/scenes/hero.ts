@@ -1,5 +1,5 @@
 import { copyAcross } from "../align";
-import type { Cast } from "../cast";
+import { wander, type Cast } from "../cast";
 import type { Cursor } from "../cursor";
 import { isRendered, layer, place, rectOf, select } from "../layer";
 import { sleep, tween } from "../time";
@@ -65,6 +65,11 @@ export async function heroScene(hero: HTMLElement, cast: Cast): Promise<void> {
   let photoLanded = (): void => {};
   const photoReady = new Promise<void>((resolve) => (photoLanded = resolve));
 
+  // The crowd drifts over whatever is already built, until the main three finish.
+  let done = false;
+  const built = (): Element[] => [...hero.querySelectorAll(".fb-shown")].filter(isRendered);
+  const roam = cast.crowd.map((c, i) => sleep(500 + i * 250).then(() => wander(c, built, () => done)));
+
   const letters = async (): Promise<void> => {
     await sleep(200);
     // Type the first letter once, then copy it column to column, renaming it in flight.
@@ -103,4 +108,6 @@ export async function heroScene(hero: HTMLElement, cast: Cast): Promise<void> {
   };
 
   await Promise.all([letters(), art(), copy()]);
+  done = true;
+  await Promise.all(roam);
 }

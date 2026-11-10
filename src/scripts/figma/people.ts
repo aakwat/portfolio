@@ -8,6 +8,10 @@ export const PEOPLE = [
   { name: "Brand", tone: "teal" },
   { name: "Art", tone: "red" },
   { name: "Copy", tone: "coral" },
+  { name: "PM", tone: "indigo" },
+  { name: "UX", tone: "cyan" },
+  { name: "Ops", tone: "lime" },
+  { name: "Data", tone: "orange" },
 ] as const;
 
 export type Person = (typeof PEOPLE)[number];
