@@ -152,3 +152,77 @@ body {
 @keyframes fb-blink {
   50% { opacity: 0; }
 }
+
+/* Duplicate-and-align: the dragged copy, Figma's align bar, red smart guides and spacing. */
+.fb-ghost {
+  position: absolute;
+  white-space: nowrap;
+}
+.fb-guide,
+.fb-gap {
+  position: absolute;
+  background: #f24822;
+}
+.fb-gap::before,
+.fb-gap::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  width: 1px;
+  height: 7px;
+  background: #f24822;
+}
+.fb-gap::before { left: 0; }
+.fb-gap::after { right: 0; }
+.fb-pill {
+  position: absolute;
+  transform: translateX(-50%);
+  padding: 0 4px;
+  border-radius: 4px;
+  background: #f24822;
+  color: #fff;
+  font: 500 10px/16px system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+.fb-align {
+  position: absolute;
+  display: flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 8px;
+  background: #2c2c2c;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.25);
+}
+.fb-ico {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+}
+.fb-ico.fb-on {
+  background: #0d99ff;
+}
+.fb-ico i {
+  position: absolute;
+  border-radius: 1px;
+  background: #e6e6e6;
+}
+.fb-ico::before {
+  content: "";
+  position: absolute;
+  background: #8a8a8a;
+}
+.fb-ico-left::before { left: 5px; top: 4px; width: 1px; height: 16px; }
+.fb-ico-left i:nth-child(1) { left: 7px; top: 7px; width: 11px; height: 3px; }
+.fb-ico-left i:nth-child(2) { left: 7px; top: 14px; width: 7px; height: 3px; }
+.fb-ico-hcenter::before { left: 12px; top: 4px; width: 1px; height: 16px; }
+.fb-ico-hcenter i:nth-child(1) { left: 6px; top: 7px; width: 13px; height: 3px; }
+.fb-ico-hcenter i:nth-child(2) { left: 8px; top: 14px; width: 9px; height: 3px; }
+.fb-ico-vcenter::before { left: 4px; top: 12px; width: 16px; height: 1px; }
+.fb-ico-vcenter i:nth-child(1) { left: 7px; top: 6px; width: 3px; height: 13px; }
+.fb-ico-vcenter i:nth-child(2) { left: 14px; top: 8px; width: 3px; height: 9px; }
+.fb-ico-distribute::before { content: none; }
+.fb-ico-distribute i { top: 6px; width: 3px; height: 12px; }
+.fb-ico-distribute i:nth-child(1) { left: 5px; }
+.fb-ico-distribute i:nth-child(2) { left: 11px; }
+.fb-ico-distribute i:nth-child(3) { left: 17px; }

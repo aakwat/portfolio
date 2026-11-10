@@ -61,9 +61,9 @@ export class Cursor {
     });
   }
 
-  toEl(target: Element, fx = 0.5, fy = 0.5): Promise<void> {
+  toEl(target: Element, fx = 0.5, fy = 0.5, ms?: number): Promise<void> {
     const r = rectOf(target);
-    return this.to(r.x + r.w * fx, r.y + r.h * fy);
+    return this.to(r.x + r.w * fx, r.y + r.h * fy, ms);
   }
 
   async click(): Promise<void> {

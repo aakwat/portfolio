@@ -1,9 +1,10 @@
+import { duplicateAndAlign } from "../align";
 import { wander, type Cast } from "../cast";
-import { select } from "../layer";
+import { isRendered, select } from "../layer";
 import { sleep } from "../time";
-import { typeIn } from "../type";
+import { reveal, typeIn } from "../type";
 
-// Aung selects the bar and types the name, Design fills the button, Dev types the links.
+// Aung selects the bar and types the name, Design fills the button, Dev builds the links.
 export async function navScene(nav: HTMLElement, cast: Cast): Promise<void> {
   const brand = nav.querySelector<HTMLElement>('[data-fb="brand"]');
   const cta = nav.querySelector<HTMLElement>('[data-fb="cta"]');
@@ -38,14 +39,24 @@ export async function navScene(nav: HTMLElement, cast: Cast): Promise<void> {
     off();
   };
 
+  // Dev types the first link, then duplicates and aligns it for each of the others, as in Figma.
   const dev = async (): Promise<void> => {
     await sleep(900);
-    for (const link of links) {
-      await cast.dev.toEl(link, 0.3, 0.6);
+    const [first, ...rest] = links;
+    if (!first) return;
+    if (isRendered(first)) {
+      await cast.dev.toEl(first, 0.3, 0.6);
       await cast.dev.click();
-      const off = select(link, "green", false, link.getAttribute("data-fb-name") ?? "Link");
-      await typeIn(link);
+      const off = select(first, "green", false, first.dataset.fbName ?? "Link");
+      await typeIn(first);
       off();
+    } else {
+      reveal(first);
+    }
+    let prev = first;
+    for (const link of rest) {
+      await duplicateAndAlign(cast.dev, prev, link);
+      prev = link;
     }
   };
 
