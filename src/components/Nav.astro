@@ -8,7 +8,7 @@ const links = [
 ];
 ---
 
-<header class="nav" data-fb-scene="nav">
+<header class="nav" data-fb-scene="nav" data-fb-name="Nav">
   <a class="brand" href="/" data-fb="brand" data-fb-name="Name">{profile.name}<span>.</span></a>
   <nav aria-label="Main">
     {links.map((link) => <a href={link.href} data-fb="link" data-fb-name={link.label}>{link.label}</a>)}

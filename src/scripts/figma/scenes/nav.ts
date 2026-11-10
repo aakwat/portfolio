@@ -1,58 +1,33 @@
-import { duplicateAndAlign } from "../align";
-import { wander, type Cast } from "../cast";
-import { isRendered, select } from "../layer";
-import { sleep } from "../time";
-import { reveal, typeIn } from "../type";
+import { duplicateAndAlign } from "../actions/align";
+import { build, tap } from "../actions/build";
+import { roam } from "../actions/roam";
+import type { Cast } from "../cast";
+import { sleep } from "../dom/clock";
 
-// Aung selects the bar and types the name, Design fills the button, Dev builds the links.
+// Aung selects the bar and types the name, Design fills the button, Dev types one link and copies it for the rest.
 export async function navScene(nav: HTMLElement, cast: Cast): Promise<void> {
-  const brand = nav.querySelector<HTMLElement>('[data-fb="brand"]');
-  const cta = nav.querySelector<HTMLElement>('[data-fb="cta"]');
-  const links = [...nav.querySelectorAll<HTMLElement>('[data-fb="link"]')];
-  if (!brand || !cta) return;
-
-  let done = false;
-  const shown = (): Element[] => [...nav.querySelectorAll(".fb-shown")];
-  const roam = cast.roamers.map((c, i) => sleep(300 + i * 300).then(() => wander(c, shown, () => done)));
+  const find = (name: string): HTMLElement[] => [...nav.querySelectorAll<HTMLElement>(`[data-fb="${name}"]`)];
+  const stopRoaming = roam(cast.roamers, nav);
 
   const lead = async (): Promise<void> => {
-    await cast.lead.toEl(nav, 0.02, 0.2);
-    await cast.lead.click();
-    const offBar = select(nav, "blue", true, "Nav");
-    await sleep(500);
-    offBar();
-    await cast.lead.toEl(brand, 0, 0.5);
-    await cast.lead.click();
-    const off = select(brand, "blue", true, "Name");
-    await typeIn(brand);
-    await sleep(300);
-    off();
+    await tap(cast.lead, nav, { x: 0.02, y: 0.2 }, 500);
+    for (const brand of find("brand")) {
+      await build(cast.lead, brand, { mine: true, aim: { x: 0, y: 0.5 }, pace: { hold: 300 } });
+    }
   };
 
   const design = async (): Promise<void> => {
     await sleep(600);
-    await cast.design.toEl(cta, 0.15, 0.3);
-    await cast.design.click();
-    const off = select(cta, "purple", false, "Button");
-    await typeIn(cta);
-    await cast.design.chat("Button ready", 900);
-    off();
+    for (const cta of find("cta")) {
+      await build(cast.design, cta, { aim: { x: 0.15, y: 0.3 }, whileSelected: () => cast.design.chat("Button ready", 900) });
+    }
   };
 
-  // Dev types the first link, then duplicates and aligns it for each of the others, as in Figma.
   const dev = async (): Promise<void> => {
     await sleep(900);
-    const [first, ...rest] = links;
+    const [first, ...rest] = find("link");
     if (!first) return;
-    if (isRendered(first)) {
-      await cast.dev.toEl(first, 0.3, 0.6);
-      await cast.dev.click();
-      const off = select(first, "green", false, first.dataset.fbName ?? "Link");
-      await typeIn(first);
-      off();
-    } else {
-      reveal(first);
-    }
+    await build(cast.dev, first, { aim: { x: 0.3, y: 0.6 }, pace: { hold: 0 } });
     let prev = first;
     for (const link of rest) {
       await duplicateAndAlign(cast.dev, prev, link);
@@ -61,6 +36,5 @@ export async function navScene(nav: HTMLElement, cast: Cast): Promise<void> {
   };
 
   await Promise.all([lead(), design(), dev()]);
-  done = true;
-  await Promise.all(roam);
+  await stopRoaming();
 }

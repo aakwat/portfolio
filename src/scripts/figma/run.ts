@@ -1,4 +1,5 @@
 import { createCast, dismiss } from "./cast";
+import { clearLayer } from "./dom/overlay";
 import { heroScene } from "./scenes/hero";
 import { navScene } from "./scenes/nav";
 
@@ -11,9 +12,10 @@ async function play(): Promise<void> {
   const cast = createCast();
   try {
     // Both scenes build at once, like a team working in one file.
-    await Promise.all([nav ? navScene(nav, cast) : null, hero ? heroScene(hero, cast) : null]);
+    await Promise.all([nav && navScene(nav, cast), hero && heroScene(hero, cast)]);
   } finally {
     await dismiss(cast);
+    clearLayer();
   }
 }
 

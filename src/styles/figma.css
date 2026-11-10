@@ -42,7 +42,6 @@ body {
   opacity: 0;
 }
 
-.fb-hover,
 .fb-box {
   position: absolute;
   border: 1px solid var(--fb, #0d99ff);
@@ -144,17 +143,15 @@ body {
   opacity: 0;
 }
 
+/* Solid while typing, as in Figma (it only blinks when idle); thickness follows the font size
+   so it still reads beside giant letters. Logical sizes keep it across the letters in rotated text too. */
 .fb-caret {
   display: inline-block;
-  width: 2px;
-  height: 0.9em;
-  margin-left: 1px;
+  inline-size: max(2px, 0.03em);
+  block-size: 0.9em;
+  margin-inline-start: 1px;
   background: #0d99ff;
   vertical-align: -0.05em;
-  animation: fb-blink 0.9s steps(1) infinite;
-}
-@keyframes fb-blink {
-  50% { opacity: 0; }
 }
 
 /* Duplicate-and-align: the dragged copy, Figma's align bar, red smart guides and spacing. */

@@ -1,5 +1,8 @@
 ---
 import { profile } from "../lib/profile";
+
+// Build time; the site redeploys often enough to stay current.
+const year = new Date().getFullYear();
 ---
 
 <section class="hero" aria-labelledby="hero-name" data-fb-scene="hero">
@@ -14,6 +17,7 @@ import { profile } from "../lib/profile";
       fetchpriority="high"
       decoding="async"
       data-fb="photo"
+      data-fb-name="Portrait"
     />
     <span class="glyph" aria-hidden="true" data-fb="glyph" data-fb-name="Letter U">U</span>
     <p class="hello" data-fb="hello" data-fb-name="Greeting">Hello, I'm Aung</p>
@@ -21,7 +25,7 @@ import { profile } from "../lib/profile";
   <div class="col"><span class="glyph" aria-hidden="true" data-fb="glyph" data-fb-name="Letter N">N</span></div>
   <div class="col">
     <span class="glyph" aria-hidden="true" data-fb="glyph" data-fb-name="Letter G">G</span>
-    <small class="copy" data-fb="copyright" data-fb-name="Copyright">© 2026 {profile.name}</small>
+    <small class="copy" data-fb="copyright" data-fb-name="Copyright">© {year} {profile.name}</small>
   </div>
 
   <div class="caption">
