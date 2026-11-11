@@ -12,8 +12,8 @@
 
   --radius-control: 10px;
   --radius-card: 20px;
-  /* Site font, self-hosted (assets/fonts, SIL OFL). It has one weight, so text never asks for bold. */
-  --font: "Young Serif", Georgia, serif;
+  /* Site font: the visitor's own monospace, so nothing downloads. */
+  --font: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
   /* Display serif for the A U N G letters only; no web font is downloaded. */
   --serif: Didot, "Bodoni 72", "Bodoni Moda", "Playfair Display", "Noto Serif Display", "Noto Serif", Georgia, serif;
 
