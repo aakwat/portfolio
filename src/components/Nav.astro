@@ -17,7 +17,7 @@ const links = [
       <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
       <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg>
     </button>
-    <a class="cta" href={`mailto:${profile.email}`} data-fb="cta" data-fb-name="Button">Let's talk</a>
+    <a class="cta" href="/#contact" data-fb="cta" data-fb-name="Button">Let's talk</a>
     <button class="theme menu-button" type="button" popovertarget="nav-menu" aria-label="Menu" data-fb="toggle" data-fb-name="Menu">
       <svg class="bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"></path></svg>
       <svg class="cross" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
@@ -25,7 +25,7 @@ const links = [
   </nav>
   <!-- Phone menu: a native popover, so Esc and a tap outside close it with no script. -->
   <div class="menu" id="nav-menu" popover>
-    <a href={`mailto:${profile.email}`}>Let's talk</a>
+    <a href="/#contact">Let's talk</a>
     {links.map((link) => <a href={link.href}>{link.label}</a>)}
   </div>
 </header>
