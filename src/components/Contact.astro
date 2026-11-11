@@ -87,7 +87,15 @@ const [hairA = "", hairB = "", hairC = ""] = avatar.hair;
     stroke-width: 3.4;
   }
 
+  /* A grid track may shrink below its longest word only with this; the email is one long word. */
+  .text {
+    min-width: 0;
+  }
   @media (max-width: 40rem) {
+    .mail {
+      font-size: var(--text-sm);
+      overflow-wrap: anywhere;
+    }
     .contact {
       grid-template-columns: 1fr 7.5rem;
       align-items: end;
