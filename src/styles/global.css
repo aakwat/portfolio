@@ -20,3 +20,10 @@ body {
 a {
   color: inherit;
 }
+
+/* In-page links (Work, Let's talk) glide instead of jumping; never for visitors who asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
