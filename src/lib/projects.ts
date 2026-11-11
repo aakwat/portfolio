@@ -65,13 +65,17 @@ export const projects: readonly Project[] = [
   },
   {
     name: "Korean to Romaji",
-    line: "Turns Hangul into romanised text, so it is easy to read aloud.",
-    tags: ["Rust", "WebAssembly", "Yew"],
-    links: [{ label: "Code", href: "https://github.com/aakwat/korean-romanization-converter" }],
+    line: "Turns Hangul into romanised text, so it is easy to read aloud. On the web and on Android.",
+    tags: ["Rust", "WebAssembly", "React Native"],
+    // One Rust converter, built to WebAssembly for the web and to a native library for the Android app.
+    links: [
+      { label: "Web code", href: "https://github.com/aakwat/korean-romanization-converter" },
+      { label: "Android code", href: "https://github.com/aakwat/react-native-expo-using-native-with-rust" },
+    ],
     media: {
       kind: "image",
       file: "korean-to-romaji.png",
-      alt: "The converter on a phone, turning 안녕 into annyeong",
+      alt: "The Android app turning 안녕 into annyeong",
       width: 404,
       height: 374,
     },
