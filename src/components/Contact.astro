@@ -6,19 +6,19 @@ import { profile } from "../lib/profile";
 const [hairA = "", hairB = "", hairC = ""] = avatar.hair;
 ---
 
-<section class="contact" id="contact" aria-labelledby="contact-title">
+<section class="contact" id="contact" aria-labelledby="contact-title" data-fb-scene="contact" data-fb-name="Let's talk">
   <div class="text">
-    <h2 id="contact-title">Let's talk.</h2>
-    <p class="intro">I build web apps from concept to production, and I'm open to new work.</p>
-    <p><a class="mail" href={`mailto:${profile.email}`}>{profile.email}</a></p>
-    <ul class="links">
+    <h2 id="contact-title" data-fb="heading" data-fb-name="Heading">Let's talk.</h2>
+    <p class="intro" data-fb="intro" data-fb-name="Intro">I build web apps from concept to production, and I'm open to new work.</p>
+    <p data-fb="mail" data-fb-name="Email"><a class="mail" href={`mailto:${profile.email}`}>{profile.email}</a></p>
+    <ul class="links" data-fb="links" data-fb-name="Links">
       <li><a href={profile.github}>GitHub</a></li>
       <li><a href={profile.linkedin}>LinkedIn</a></li>
       <li><a href="/resume.pdf">Resume</a></li>
     </ul>
   </div>
 
-  <svg class="avatar" viewBox={`-6 -6 ${avatar.width + 12} ${avatar.height + 5}`} role="img" aria-label={`Line drawing of ${profile.name}`} data-draw>
+  <svg class="avatar" viewBox={`-6 -6 ${avatar.width + 12} ${avatar.height + 5}`} role="img" aria-label={`Line drawing of ${profile.name}`} data-fb="avatar" data-fb-name="Portrait">
     <defs>
       <clipPath id="avatar-shirt"><path d={avatar.shirt} /></clipPath>
     </defs>
@@ -30,10 +30,6 @@ const [hairA = "", hairB = "", hairC = ""] = avatar.hair;
     <path class="pen line shirt" pathLength="1" d={avatar.shirt} />
   </svg>
 </section>
-
-<script>
-  import "../scripts/draw-on-view";
-</script>
 
 <style>
   .contact {
@@ -89,25 +85,6 @@ const [hairA = "", hairB = "", hairC = ""] = avatar.hair;
   /* Wider than the 2.5-unit gap between strokes, so the finished fill is solid. */
   .fill {
     stroke-width: 3.4;
-  }
-
-  /* The pen draws once on first view: hair, face, shirt outline, then the fill strokes. */
-  [data-draw="ready"] .pen {
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-  }
-  [data-draw="go"] .pen {
-    stroke-dasharray: 1;
-    animation: draw 1.2s ease-in-out both;
-  }
-  [data-draw="go"] .b { animation-delay: 0.3s; }
-  [data-draw="go"] .c { animation-delay: 0.6s; }
-  [data-draw="go"] .face { animation-delay: 1.4s; animation-duration: 0.8s; }
-  [data-draw="go"] .shirt { animation-delay: 2s; animation-duration: 0.8s; }
-  [data-draw="go"] .fill { animation-delay: 2.6s; animation-duration: 1.6s; animation-timing-function: linear; }
-  @keyframes draw {
-    from { stroke-dashoffset: 1; }
-    to { stroke-dashoffset: 0; }
   }
 
   @media (max-width: 40rem) {

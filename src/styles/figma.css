@@ -245,3 +245,60 @@ body {
   position: absolute;
   margin: 0;
 }
+
+/* Pen tool: anchors along the path, the live anchor and its bezier handles (Figma's vector edit look). */
+.fb-pen > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.fb-pen-anchor {
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  background: #fff;
+  border: 1px solid var(--fb);
+}
+.fb-pen-live {
+  background: var(--fb);
+}
+.fb-pen-bar {
+  width: 44px;
+  height: 1px;
+  background: var(--fb);
+  transform-origin: 0 0;
+}
+.fb-pen-end {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--fb);
+}
+.fb-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 6px 8px;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #2c2c2c;
+  color: #e5e5e5;
+  font: 500 11px/1 system-ui, sans-serif;
+  box-shadow: 0 4px 16px rgb(0 0 0 / 0.3);
+}
+.fb-fill-title {
+  grid-column: 1 / -1;
+  font-weight: 600;
+}
+.fb-fill-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--fg);
+  outline: 1px solid #555;
+}
