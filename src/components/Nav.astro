@@ -18,7 +18,16 @@ const links = [
       <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg>
     </button>
     <a class="cta" href={`mailto:${profile.email}`} data-fb="cta" data-fb-name="Button">Let's talk</a>
+    <button class="theme menu-button" type="button" popovertarget="nav-menu" aria-label="Menu" data-fb="toggle" data-fb-name="Menu">
+      <svg class="bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"></path></svg>
+      <svg class="cross" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </button>
   </nav>
+  <!-- Phone menu: a native popover, so Esc and a tap outside close it with no script. -->
+  <div class="menu" id="nav-menu" popover>
+    <a href={`mailto:${profile.email}`}>Let's talk</a>
+    {links.map((link) => <a href={link.href}>{link.label}</a>)}
+  </div>
 </header>
 
 <style>
@@ -127,18 +136,62 @@ const links = [
     }
   }
 
-  /* Phones keep name and button only; the hero repeats resume and profile links. */
+  .menu-button,
+  .cross,
+  :global(.nav:has(.menu:popover-open)) .bars {
+    display: none;
+  }
+  :global(.nav:has(.menu:popover-open)) .cross {
+    display: block;
+  }
+  .menu {
+    inset: 4.5rem 1rem auto auto;
+    width: 13rem;
+    margin: 0;
+    padding: 0.375rem;
+    border: 1px solid var(--line);
+    border-radius: 0 14px 14px 14px;
+    background: var(--bg);
+    color: var(--fg);
+    box-shadow: 0 8px 30px rgb(0 0 0 / 0.2);
+  }
+  .menu:popover-open {
+    display: grid;
+  }
+  .menu a {
+    padding: 0 0.75rem;
+    border-radius: var(--radius-control);
+    color: var(--fg);
+    line-height: 44px;
+    text-decoration: none;
+  }
+  .menu a:first-child,
+  .menu a:hover,
+  .menu a:focus-visible {
+    background: var(--line);
+  }
+
+  /* Phones: name, theme and a menu button; every link moves into the menu. */
   @media (max-width: 30rem) {
-    nav a:not(.cta) {
+    nav a,
+    nav .cta {
       display: none;
     }
-    /* With the links gone, keep the theme button beside "Let's talk", not adrift. */
+    .menu-button {
+      display: grid;
+    }
     nav {
       gap: 0.25rem;
+    }
+  }
+  @media (min-width: 30.01rem) {
+    .menu {
+      display: none;
     }
   }
 </style>
 
 <script>
   import "../scripts/theme-toggle";
+  import "../scripts/nav-menu";
 </script>
