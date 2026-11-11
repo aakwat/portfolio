@@ -10,6 +10,7 @@ interface Props {
 
 const { title, description = profile.description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const preview = new URL("/og.png", Astro.site).href;
 const person = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -23,10 +24,12 @@ const person = {
 <meta charset="utf-8" />
 <!-- Blocking on purpose: applies the saved theme before first paint. -->
 <script is:inline src="/theme.js"></script>
-<!-- The site font, fetched early so headings do not reflow when it lands. -->
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>{title}</title>
 <meta name="description" content={description} />
+<link rel="icon" href="/favicon.ico" sizes="32x32" />
+<link rel="icon" href="/apple-touch-icon.png" type="image/png" sizes="180x180" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 {
   noindex ? (
     <meta name="robots" content="noindex" />
@@ -37,7 +40,11 @@ const person = {
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonical} />
-      <meta name="twitter:card" content="summary" />
+      <meta property="og:image" content={preview} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={`AUNG, ${profile.name}, ${profile.role}`} />
+      <meta name="twitter:card" content="summary_large_image" />
       <script type="application/ld+json" set:html={JSON.stringify(person)} />
     </>
   )
