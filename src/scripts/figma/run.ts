@@ -50,6 +50,8 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   const work = scene("work");
   // Its code is fetched only when the section comes into view, keeping the first load small.
   if (work) onFirstView(work, async (section) => (await import("./scenes/work")).workScene(section));
+  const experience = scene("experience");
+  if (experience) onFirstView(experience, async (section) => (await import("./scenes/experience")).experienceScene(section));
   const contact = scene("contact");
   if (contact) onFirstView(contact, async (section) => (await import("./scenes/contact")).contactScene(section));
 }

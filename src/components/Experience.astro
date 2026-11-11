@@ -1,0 +1,89 @@
+---
+import { roles, shortDate } from "../lib/experience";
+---
+
+<section class="experience" id="experience" aria-labelledby="experience-title" data-fb-scene="experience" data-fb-name="Experience">
+  <h2 id="experience-title" data-fb="heading" data-fb-name="Heading">Experience</h2>
+  <ol class="timeline">
+    {
+      roles.map((role) => (
+        <li class:list={["role", { now: role.to === null }]} data-fb="role" data-fb-name={role.org}>
+          <p class="when">
+            <time datetime={role.from}>{shortDate(role.from)}</time> –{" "}
+            {role.to ? <time datetime={role.to}>{shortDate(role.to)}</time> : "Now"}
+          </p>
+          <h3>{role.title}</h3>
+          <p class="org">{role.org}</p>
+          <p class="line">{role.line}</p>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .experience {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 6rem 1.5rem 5rem;
+    border-top: 1px solid var(--line);
+  }
+  h2 {
+    margin: 0 0 2.5rem;
+    font-size: var(--text-xl);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .timeline {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  /* Each role draws its own marker and the line down to the next, so the line grows as roles appear. */
+  .role {
+    position: relative;
+    padding: 0 0 2.5rem 2.25rem;
+  }
+  .role::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.45rem;
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--fg);
+    border-radius: 3px;
+    background: var(--bg);
+  }
+  .role:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1.4rem;
+    bottom: 0;
+    width: 1px;
+    background: var(--line);
+  }
+  .now::before {
+    background: var(--fg);
+  }
+  .when,
+  .org,
+  .line {
+    margin: 0;
+    color: var(--muted);
+  }
+  .when {
+    font-size: var(--text-xs);
+  }
+  h3 {
+    margin: 0.25rem 0 0;
+    font-size: var(--text-md);
+    font-weight: 400;
+  }
+  .line {
+    max-width: 60ch;
+    margin-top: 0.5rem;
+  }
+</style>
