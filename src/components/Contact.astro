@@ -1,0 +1,121 @@
+---
+import avatar from "../lib/avatar.json";
+import { profile } from "../lib/profile";
+
+// Traced from assets/me-transparent.png: pen-loop hair, face outline, shirt outline and fill strokes.
+const [hairA = "", hairB = "", hairC = ""] = avatar.hair;
+---
+
+<section class="contact" id="contact" aria-labelledby="contact-title">
+  <div class="text">
+    <h2 id="contact-title">Let's talk.</h2>
+    <p class="intro">I build web apps from concept to production, and I'm open to new work.</p>
+    <p><a class="mail" href={`mailto:${profile.email}`}>{profile.email}</a></p>
+    <ul class="links">
+      <li><a href={profile.github}>GitHub</a></li>
+      <li><a href={profile.linkedin}>LinkedIn</a></li>
+      <li><a href="/resume.pdf">Resume</a></li>
+    </ul>
+  </div>
+
+  <svg class="avatar" viewBox={`-6 -6 ${avatar.width + 12} ${avatar.height + 5}`} role="img" aria-label={`Line drawing of ${profile.name}`} data-draw>
+    <defs>
+      <clipPath id="avatar-shirt"><path d={avatar.shirt} /></clipPath>
+    </defs>
+    <path class="pen hair a" pathLength="1" d={hairA} />
+    <path class="pen hair b" pathLength="1" d={hairB} />
+    <path class="pen hair c" pathLength="1" d={hairC} />
+    <path class="pen line face" pathLength="1" d={avatar.face} />
+    <path class="pen fill" pathLength="1" clip-path="url(#avatar-shirt)" d={avatar.shirtFill} />
+    <path class="pen line shirt" pathLength="1" d={avatar.shirt} />
+  </svg>
+</section>
+
+<script>
+  import "../scripts/draw-on-view";
+</script>
+
+<style>
+  .contact {
+    display: grid;
+    grid-template-columns: 1fr minmax(0, 22rem);
+    align-items: center;
+    gap: 3rem;
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 6rem 1.5rem 7rem;
+    border-top: 1px solid var(--line);
+  }
+  h2 {
+    margin: 0;
+    font-size: var(--text-xl);
+    letter-spacing: -0.03em;
+    font-weight: 400;
+    line-height: 1;
+  }
+  .intro {
+    max-width: 30ch;
+    margin: 1.25rem 0;
+    color: var(--muted);
+  }
+  .mail {
+    font-size: var(--text-md);
+    text-underline-offset: 0.2em;
+  }
+  .links {
+    display: flex;
+    gap: 1.25rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+  }
+  .avatar {
+    width: 100%;
+    /* The shirt runs on past the bottom edge; cut it there, like a cropped photo. */
+    overflow: hidden;
+  }
+  .pen {
+    fill: none;
+    stroke: var(--fg);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .hair,
+  .line {
+    stroke-width: 1.6;
+    vector-effect: non-scaling-stroke;
+  }
+  /* Wider than the 2.5-unit gap between strokes, so the finished fill is solid. */
+  .fill {
+    stroke-width: 3.4;
+  }
+
+  /* The pen draws once on first view: hair, face, shirt outline, then the fill strokes. */
+  [data-draw="ready"] .pen {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  [data-draw="go"] .pen {
+    stroke-dasharray: 1;
+    animation: draw 1.2s ease-in-out both;
+  }
+  [data-draw="go"] .b { animation-delay: 0.3s; }
+  [data-draw="go"] .c { animation-delay: 0.6s; }
+  [data-draw="go"] .face { animation-delay: 1.4s; animation-duration: 0.8s; }
+  [data-draw="go"] .shirt { animation-delay: 2s; animation-duration: 0.8s; }
+  [data-draw="go"] .fill { animation-delay: 2.6s; animation-duration: 1.6s; animation-timing-function: linear; }
+  @keyframes draw {
+    from { stroke-dashoffset: 1; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  @media (max-width: 40rem) {
+    .contact {
+      grid-template-columns: 1fr 7.5rem;
+      align-items: end;
+      gap: 1rem;
+      padding: 4rem 1.25rem 5rem;
+    }
+  }
+</style>
