@@ -30,7 +30,8 @@ const KEY_LIGHT = vec3f(0.3, -0.5, 1.0);
 const FACE_ON_SPREAD_CUT = 0.909;
 const RIM_POWER = 3.0;
 const SPECULAR_ON_RING = 0.5;
-const RING_WIDTH = 4.0;
+const RING_WIDTH = 1.5;
+const RING_STRENGTH = 0.5;
 
 @vertex
 fn vert_main(@builtin(vertex_index) i: u32) -> @builtin(position) vec4f {
@@ -94,7 +95,7 @@ fn frag_main(@builtin(position) coord: vec4f) -> @location(0) vec4f {
 
     let feather = RING_WIDTH * glass.pixel;
     let ring = coverage(d - glass.pixel, feather) - coverage(d, feather);
-    let edge_light = ring * (1.0 + fresnel * glass.edge_highlight);
+    let edge_light = ring * RING_STRENGTH * (1.0 + fresnel * glass.edge_highlight);
     let halfway = normalize(normalize(KEY_LIGHT) + VIEW);
     let shine = pow(max(dot(normal, halfway), 0.0), glass.spec_power) * ring * SPECULAR_ON_RING;
     let rim = pow(1.0 - facing, RIM_POWER) * mask * glass.rim_strength;

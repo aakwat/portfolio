@@ -10,7 +10,9 @@ export interface GlassGPU {
 }
 
 // The look, shared by every pane; lens and thickness scale with the pane in drawGlass.
-const LOOK = { dispersion: 0.012, f0: 0.04, specPower: 32, edgeHighlight: 2, rimStrength: 0.15, fresnel: 0.3 };
+const LOOK = { dispersion: 0.012, f0: 0.04, specPower: 32, edgeHighlight: 0.8, rimStrength: 0.05, fresnel: 0.3 };
+// Glass height in CSS px; fixed, so big panes keep the same thin bright edge as small ones.
+const THICKNESS = 6;
 
 export async function startGPU(): Promise<GlassGPU | null> {
   if (!("gpu" in navigator)) return null;
@@ -62,7 +64,7 @@ export function drawGlass(
   // 16 floats: the shader's 13, padded to a 16-byte multiple.
   const uniforms = new Float32Array([
     width, height, Math.min(radius, width / 2, height / 2), lens,
-    lens, dpr, LOOK.dispersion, LOOK.f0,
+    THICKNESS * dpr, dpr, LOOK.dispersion, LOOK.f0,
     LOOK.specPower, LOOK.edgeHighlight, LOOK.rimStrength, LOOK.fresnel,
     backdrop ? 1 : 0, 0, 0, 0,
   ]);
