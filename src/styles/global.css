@@ -35,9 +35,12 @@ a {
   pointer-events: none;
   visibility: hidden;
 }
-/* Doubled class: outranks a component's scoped fallback look (one class plus its scope attribute). */
+/* Doubled class: outranks a component's scoped fallback look (one class plus its scope attribute). The shader
+   draws the rim, so the border goes; light-only panes (empty data-glass) keep their CSS blur and tint. */
 .glass.glass[data-glass-live] {
-  border: 0;
+  border-color: transparent;
+}
+.glass.glass[data-glass-live]:not([data-glass=""]) {
   background: none;
   backdrop-filter: none;
 }
@@ -45,7 +48,7 @@ a {
   visibility: visible;
 }
 /* Painted after the canvas, under the text: a light tint so text stays readable on busy backdrops. */
-.glass[data-glass-live]::after {
+.glass[data-glass-live]:not([data-glass=""])::after {
   content: "";
   position: absolute;
   inset: 0;

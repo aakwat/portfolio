@@ -1,30 +1,35 @@
-// Turns each [data-glass] pane into WebGPU liquid glass over the image its value names (an element id).
+// Turns each [data-glass] pane into WebGPU liquid glass over the image its value names (an element id); an empty
+// value draws only the light on the glass, over the pane's own CSS blur.
 // Without WebGPU, or for visitors who asked for less transparency, panes keep their CSS look.
 import { composeBackdrop } from "./backdrop";
+import { startLens } from "./lens";
 import { drawGlass, startGPU, type GlassGPU } from "./render";
 
 const panes = [...document.querySelectorAll<HTMLElement>("[data-glass]")];
 
 function drawPane(gpu: GlassGPU, pane: HTMLElement): void {
   const canvas = pane.querySelector<HTMLCanvasElement>(":scope > canvas.glass-canvas");
-  const photo = document.getElementById(pane.dataset.glass ?? "");
+  const id = pane.dataset.glass ?? "";
+  const photo = id ? document.getElementById(id) : null;
   const media = pane.dataset.glassMedia;
   const rect = pane.getBoundingClientRect();
   const off = () => {
     delete pane.dataset.glassLive;
   };
-  if (!canvas || !(photo instanceof HTMLImageElement) || rect.width === 0 || (media && !matchMedia(media).matches)) {
+  const hasPhoto = photo instanceof HTMLImageElement;
+  if (!canvas || (id && !hasPhoto) || rect.width === 0 || (media && !matchMedia(media).matches)) {
     off();
     return;
   }
-  if (!photo.complete || photo.naturalWidth === 0) {
+  if (hasPhoto && (!photo.complete || photo.naturalWidth === 0)) {
     photo.addEventListener("load", () => drawPane(gpu, pane), { once: true });
     return;
   }
   const dpr = window.devicePixelRatio || 1;
-  const backdrop = composeBackdrop(rect, photo, dpr);
+  const backdrop = hasPhoto ? composeBackdrop(rect, photo, dpr) : null;
+  const size = { width: Math.max(1, Math.round(rect.width * dpr)), height: Math.max(1, Math.round(rect.height * dpr)) };
   const radius = Number.parseFloat(getComputedStyle(pane).borderTopLeftRadius) * dpr;
-  if (backdrop && drawGlass(gpu, canvas, backdrop, radius, dpr)) pane.dataset.glassLive = "";
+  if ((!hasPhoto || backdrop) && drawGlass(gpu, canvas, backdrop, size, radius, dpr)) pane.dataset.glassLive = "";
   else off();
 }
 
@@ -51,4 +56,6 @@ async function start(): Promise<void> {
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
 }
 
+// The SVG lens needs no WebGPU, so it starts on its own.
+startLens();
 void start();

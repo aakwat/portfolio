@@ -1,4 +1,5 @@
 /// <reference types="@webgpu/types" />
+import { LENS_REACH } from "./lens";
 import { GLASS_SHADER } from "./shader";
 
 export interface GlassGPU {
@@ -10,8 +11,6 @@ export interface GlassGPU {
 
 // The look, shared by every pane; lens and thickness scale with the pane in drawGlass.
 const LOOK = { dispersion: 0.012, f0: 0.04, specPower: 32, edgeHighlight: 2, rimStrength: 0.15, fresnel: 0.3 };
-// How far in from the edge the lens curves, as a share of the pane's shorter half.
-const LENS_REACH = 0.6;
 
 export async function startGPU(): Promise<GlassGPU | null> {
   if (!("gpu" in navigator)) return null;
@@ -33,28 +32,39 @@ export async function startGPU(): Promise<GlassGPU | null> {
 
 // ponytail: builds and frees its GPU resources on every call; fine while panes redraw only on resize or theme
 // change, keep them per pane once something redraws every frame.
-export function drawGlass(gpu: GlassGPU, canvas: HTMLCanvasElement, backdrop: HTMLCanvasElement, radius: number, dpr: number): boolean {
+// A null backdrop draws only the light on the glass; `size` is in device pixels and matches the backdrop's.
+export function drawGlass(
+  gpu: GlassGPU,
+  canvas: HTMLCanvasElement,
+  backdrop: HTMLCanvasElement | null,
+  size: { width: number; height: number },
+  radius: number,
+  dpr: number,
+): boolean {
   const { device, pipeline, sampler, format } = gpu;
   const context = canvas.getContext("webgpu");
   if (!context) return false;
-  const { width, height } = backdrop;
+  const { width, height } = size;
   canvas.width = width;
   canvas.height = height;
   context.configure({ device, format, alphaMode: "premultiplied" });
 
+  // The binding needs a texture even when the shader never samples it.
   const texture = device.createTexture({
     label: "glass backdrop",
-    size: [width, height],
+    size: backdrop ? [backdrop.width, backdrop.height] : [1, 1],
     format: "rgba8unorm",
     usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
   });
-  device.queue.copyExternalImageToTexture({ source: backdrop }, { texture }, [width, height]);
+  if (backdrop) device.queue.copyExternalImageToTexture({ source: backdrop }, { texture }, [backdrop.width, backdrop.height]);
 
   const lens = (LENS_REACH * Math.min(width, height)) / 2;
+  // 16 floats: the shader's 13, padded to a 16-byte multiple.
   const uniforms = new Float32Array([
     width, height, Math.min(radius, width / 2, height / 2), lens,
     lens, dpr, LOOK.dispersion, LOOK.f0,
     LOOK.specPower, LOOK.edgeHighlight, LOOK.rimStrength, LOOK.fresnel,
+    backdrop ? 1 : 0, 0, 0, 0,
   ]);
   const buffer = device.createBuffer({ label: "glass uniforms", size: uniforms.byteLength, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   device.queue.writeBuffer(buffer, 0, uniforms);
