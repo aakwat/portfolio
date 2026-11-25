@@ -1,8 +1,9 @@
 // Refraction of live HTML: a pane's backdrop is bent by an SVG displacement filter (only Chromium applies SVG
 // filters in backdrop-filter), driven by a lens map built here with the shader's lens shape. The map reaches the
 // filter as a blob: URL, which the CSP's img-src allows (assets/_headers).
+// Each pane is tuned in CSS with --glass-bend (rim pull, px) and --glass-blur (softness, px); see global.css.
 
-// How far in from the edge the lens curves, as a share of the pane's shorter half; shared with the WebGPU glass.
+// How far in from the edge the WebGPU lens curves, as a share of the pane's shorter half.
 export const LENS_REACH = 0.6;
 
 // Inigo Quilez's rounded box, as in shader.ts: negative inside, positive outside.
@@ -44,44 +45,79 @@ export function lensMap(width: number, height: number, radius: number, lens: num
   return data;
 }
 
-async function paintLens(pane: HTMLElement): Promise<void> {
-  const filter = document.getElementById(pane.dataset.glassLens ?? "");
-  const image = filter?.querySelector("feImage");
-  const shift = filter?.querySelector("feDisplacementMap");
+interface Lens {
+  image: SVGElement;
+  shift: SVGElement;
+  soft: SVGElement;
+}
+
+const SVG = "http://www.w3.org/2000/svg";
+const lenses = new WeakMap<HTMLElement, Lens>();
+
+function svg(tag: string, attributes: Record<string, string>): SVGElement {
+  const element = document.createElementNS(SVG, tag);
+  for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+  return element;
+}
+
+// One filter per pane, in a shared zero-size <svg>; sRGB, so the map's bytes are read as-is.
+function lensFor(pane: HTMLElement, defs: SVGElement): Lens {
+  const known = lenses.get(pane);
+  if (known) return known;
+  const id = `glass-lens-${defs.childElementCount}`;
+  const filter = svg("filter", { id, x: "0", y: "0", width: "100%", height: "100%", "color-interpolation-filters": "sRGB" });
+  const image = svg("feImage", { result: "map", preserveAspectRatio: "none" });
+  const shift = svg("feDisplacementMap", { in: "SourceGraphic", in2: "map", xChannelSelector: "R", yChannelSelector: "G", result: "bent" });
+  const soft = svg("feGaussianBlur", { in: "bent", result: "soft" });
+  filter.append(image, shift, soft, svg("feColorMatrix", { in: "soft", type: "saturate", values: "1.6" }));
+  defs.append(filter);
+  pane.style.setProperty("--glass-lens", `url(#${id})`);
+  const lens = { image, shift, soft };
+  lenses.set(pane, lens);
+  return lens;
+}
+
+async function paintLens(pane: HTMLElement, defs: SVGElement): Promise<void> {
   const rect = pane.getBoundingClientRect();
   const width = Math.round(rect.width);
   const height = Math.round(rect.height);
-  if (!image || !shift || width === 0 || height === 0) {
+  if (width === 0 || height === 0) {
     delete pane.dataset.lensLive;
     return;
   }
-  const lens = (LENS_REACH * Math.min(width, height)) / 2;
-  const radius = Number.parseFloat(getComputedStyle(pane).borderTopLeftRadius);
+  const style = getComputedStyle(pane);
+  const lens = Math.min(Number.parseFloat(style.getPropertyValue("--glass-bend")) || 0, width / 2, height / 2);
+  if (lens <= 0) return;
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
-  ctx.putImageData(new ImageData(lensMap(width, height, radius, lens), width, height), 0, 0);
+  ctx.putImageData(new ImageData(lensMap(width, height, Number.parseFloat(style.borderTopLeftRadius), lens), width, height), 0, 0);
   const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve));
   if (!blob) return;
+  const { image, shift, soft } = lensFor(pane, defs);
   const previous = image.getAttribute("href");
   image.setAttribute("href", URL.createObjectURL(blob));
   image.setAttribute("width", String(width));
   image.setAttribute("height", String(height));
   shift.setAttribute("scale", String(2 * lens));
+  soft.setAttribute("stdDeviation", String(Number.parseFloat(style.getPropertyValue("--glass-blur")) || 0));
   if (previous?.startsWith("blob:")) URL.revokeObjectURL(previous);
   pane.dataset.lensLive = "";
 }
 
-// Panes name their filter's id in data-glass-lens and get data-lens-live once its map is in place.
+// Panes with an empty data-glass bend the live page; they get data-lens-live once their filter is ready.
 export function startLens(): void {
   // userAgentData exists only in Chromium, the one engine that applies url() in backdrop-filter.
   if (!("userAgentData" in navigator) || matchMedia("(prefers-reduced-transparency: reduce)").matches) return;
-  const panes = document.querySelectorAll<HTMLElement>("[data-glass-lens]");
+  const panes = document.querySelectorAll<HTMLElement>('[data-glass=""]');
+  if (panes.length === 0) return;
+  const defs = svg("svg", { class: "lens-defs", "aria-hidden": "true" });
+  document.body.append(defs);
   // Fires once on observe, which paints the first map; the map must match the pane's size, so resizes repaint.
   const resized = new ResizeObserver((entries) => {
-    for (const entry of entries) if (entry.target instanceof HTMLElement) void paintLens(entry.target);
+    for (const entry of entries) if (entry.target instanceof HTMLElement) void paintLens(entry.target, defs);
   });
   panes.forEach((pane) => resized.observe(pane));
 }
