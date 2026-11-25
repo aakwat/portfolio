@@ -10,6 +10,7 @@ const year = new Date().getFullYear();
   <div class="col photo-col">
     <img
       class="photo"
+      id="portrait"
       src="/portrait.jpg"
       alt={profile.name}
       width="640"
@@ -18,7 +19,7 @@ const year = new Date().getFullYear();
       decoding="async"
     />
     <span class="glyph" aria-hidden="true">U</span>
-    <p class="hello">Hello, I'm Aung</p>
+    <p class="hello glass" data-glass="portrait"><canvas class="glass-canvas" aria-hidden="true"></canvas>Hello, I'm Aung</p>
   </div>
   <div class="col"><span class="glyph" aria-hidden="true">N</span></div>
   <div class="col">
@@ -26,13 +27,19 @@ const year = new Date().getFullYear();
     <small class="copy">© {year} {profile.name}</small>
   </div>
 
-  <div class="caption">
+  <!-- Glass only on phones, where the caption overlaps the photo. -->
+  <div class="caption glass" data-glass="portrait" data-glass-media="(max-width: 48rem)">
+    <canvas class="glass-canvas" aria-hidden="true"></canvas>
     <p class="wave" aria-hidden="true"><span>A</span><span>U</span><span>N</span><span>G</span></p>
     <h1 id="hero-name">{profile.name}</h1>
     <p>{profile.summary}</p>
     <a href="/resume.pdf">View resume <span aria-hidden="true">↙</span></a>
   </div>
 </section>
+
+<script>
+  import "../scripts/glass/run";
+</script>
 
 <style>
   .hero {
@@ -94,14 +101,19 @@ const year = new Date().getFullYear();
     color: var(--bg);
   }
   /* Just under the U (its top plus its box plus a gap); white because it sits on the photo. */
+  /* A pill, so it can turn to glass over the photo; dark tint keeps the white text readable. */
   .hello {
     position: absolute;
-    left: 0;
-    right: 0;
+    left: 50%;
+    translate: -50% 0;
+    width: max-content;
+    max-width: calc(100% - 2rem);
     top: calc((100% - var(--box)) * var(--y-u) + var(--box) + 1rem);
     z-index: 2;
     margin: 0;
-    padding: 0 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    --glass-tint: rgb(0 0 0 / 0.2);
     color: #fff;
     font-size: 0.75rem;
     line-height: 1.4;

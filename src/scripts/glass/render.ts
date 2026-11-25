@@ -1,0 +1,83 @@
+/// <reference types="@webgpu/types" />
+import { GLASS_SHADER } from "./shader";
+
+export interface GlassGPU {
+  device: GPUDevice;
+  pipeline: GPURenderPipeline;
+  sampler: GPUSampler;
+  format: GPUTextureFormat;
+}
+
+// The look, shared by every pane; lens and thickness scale with the pane in drawGlass.
+const LOOK = { dispersion: 0.012, f0: 0.04, specPower: 32, edgeHighlight: 2, rimStrength: 0.15, fresnel: 0.3 };
+// How far in from the edge the lens curves, as a share of the pane's shorter half.
+const LENS_REACH = 0.6;
+
+export async function startGPU(): Promise<GlassGPU | null> {
+  if (!("gpu" in navigator)) return null;
+  const adapter = await navigator.gpu.requestAdapter();
+  if (!adapter) return null;
+  const device = await adapter.requestDevice();
+  const format = navigator.gpu.getPreferredCanvasFormat();
+  const module = device.createShaderModule({ label: "glass", code: GLASS_SHADER });
+  const pipeline = device.createRenderPipeline({
+    label: "glass",
+    layout: "auto",
+    vertex: { module, entryPoint: "vert_main" },
+    fragment: { module, entryPoint: "frag_main", targets: [{ format }] },
+    primitive: { topology: "triangle-list" },
+  });
+  const sampler = device.createSampler({ minFilter: "linear", magFilter: "linear" });
+  return { device, pipeline, sampler, format };
+}
+
+// ponytail: builds and frees its GPU resources on every call; fine while panes redraw only on resize or theme
+// change, keep them per pane once something redraws every frame.
+export function drawGlass(gpu: GlassGPU, canvas: HTMLCanvasElement, backdrop: HTMLCanvasElement, radius: number, dpr: number): boolean {
+  const { device, pipeline, sampler, format } = gpu;
+  const context = canvas.getContext("webgpu");
+  if (!context) return false;
+  const { width, height } = backdrop;
+  canvas.width = width;
+  canvas.height = height;
+  context.configure({ device, format, alphaMode: "premultiplied" });
+
+  const texture = device.createTexture({
+    label: "glass backdrop",
+    size: [width, height],
+    format: "rgba8unorm",
+    usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
+  });
+  device.queue.copyExternalImageToTexture({ source: backdrop }, { texture }, [width, height]);
+
+  const lens = (LENS_REACH * Math.min(width, height)) / 2;
+  const uniforms = new Float32Array([
+    width, height, Math.min(radius, width / 2, height / 2), lens,
+    lens, dpr, LOOK.dispersion, LOOK.f0,
+    LOOK.specPower, LOOK.edgeHighlight, LOOK.rimStrength, LOOK.fresnel,
+  ]);
+  const buffer = device.createBuffer({ label: "glass uniforms", size: uniforms.byteLength, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  device.queue.writeBuffer(buffer, 0, uniforms);
+
+  const bindGroup = device.createBindGroup({
+    layout: pipeline.getBindGroupLayout(0),
+    entries: [
+      { binding: 0, resource: { buffer } },
+      { binding: 1, resource: sampler },
+      { binding: 2, resource: texture.createView() },
+    ],
+  });
+  const encoder = device.createCommandEncoder();
+  const pass = encoder.beginRenderPass({
+    colorAttachments: [{ view: context.getCurrentTexture().createView(), clearValue: [0, 0, 0, 0], loadOp: "clear", storeOp: "store" }],
+  });
+  pass.setPipeline(pipeline);
+  pass.setBindGroup(0, bindGroup);
+  pass.draw(6);
+  pass.end();
+  device.queue.submit([encoder.finish()]);
+  // Freed once the submitted work is done, per the WebGPU spec.
+  texture.destroy();
+  buffer.destroy();
+  return true;
+}

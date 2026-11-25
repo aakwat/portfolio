@@ -21,6 +21,40 @@ a {
   color: inherit;
 }
 
+/* Liquid glass panes (scripts/glass/run.ts): the canvas draws behind the content once WebGPU is live;
+   until then the pane keeps its own CSS look. */
+.glass {
+  isolation: isolate;
+}
+.glass-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  visibility: hidden;
+}
+/* Doubled class: outranks a component's scoped fallback look (one class plus its scope attribute). */
+.glass.glass[data-glass-live] {
+  border: 0;
+  background: none;
+  backdrop-filter: none;
+}
+.glass[data-glass-live] > .glass-canvas {
+  visibility: visible;
+}
+/* Painted after the canvas, under the text: a light tint so text stays readable on busy backdrops. */
+.glass[data-glass-live]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--glass-tint, color-mix(in srgb, var(--bg) 25%, transparent));
+  pointer-events: none;
+}
+
 /* In-page links (Work, Let's talk) glide instead of jumping; never for visitors who asked for less motion. */
 @media (prefers-reduced-motion: no-preference) {
   html {
