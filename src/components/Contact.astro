@@ -6,19 +6,19 @@ import { profile } from "../lib/profile";
 const [hairA = "", hairB = "", hairC = ""] = avatar.hair;
 ---
 
-<section class="contact" id="contact" aria-labelledby="contact-title" data-fb-scene="contact" data-fb-name="Let's talk">
+<section class="contact" id="contact" aria-labelledby="contact-title">
   <div class="text">
-    <h2 id="contact-title" data-fb="heading" data-fb-name="Heading">Let's talk.</h2>
-    <p class="intro" data-fb="intro" data-fb-name="Intro">I build web apps from concept to production, and I'm open to new work.</p>
-    <p data-fb="mail" data-fb-name="Email"><a class="mail" href={`mailto:${profile.email}`}>{profile.email}</a></p>
-    <ul class="links" data-fb="links" data-fb-name="Links">
+    <h2 id="contact-title">Let's talk.</h2>
+    <p class="intro">I build web apps from concept to production, and I'm open to new work.</p>
+    <p><a class="mail" href={`mailto:${profile.email}`}>{profile.email}</a></p>
+    <ul class="links">
       <li><a href={profile.github}>GitHub</a></li>
       <li><a href={profile.linkedin}>LinkedIn</a></li>
       <li><a href="/resume.pdf">Resume</a></li>
     </ul>
   </div>
 
-  <svg class="avatar" viewBox={`-6 -6 ${avatar.width + 12} ${avatar.height + 5}`} role="img" aria-label={`Line drawing of ${profile.name}`} data-fb="avatar" data-fb-name="Portrait">
+  <svg class="avatar" viewBox={`-6 -6 ${avatar.width + 12} ${avatar.height + 5}`} role="img" aria-label={`Line drawing of ${profile.name}`}>
     <defs>
       <clipPath id="avatar-shirt"><path d={avatar.shirt} /></clipPath>
     </defs>

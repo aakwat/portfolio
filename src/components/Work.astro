@@ -6,17 +6,17 @@ import ProjectMedia from "./ProjectMedia.astro";
 const [featured, ...rest] = projects;
 ---
 
-<section class="work" id="work" aria-labelledby="work-title" data-fb-scene="work" data-fb-name="Work">
+<section class="work" id="work" aria-labelledby="work-title">
   <header class="head">
-    <h2 id="work-title" data-fb="heading" data-fb-name="Heading">Work</h2>
-    <p data-fb="intro" data-fb-name="Intro">Things I have built, from first sketch to production.</p>
+    <h2 id="work-title">Work</h2>
+    <p>Things I have built, from first sketch to production.</p>
   </header>
 
   {
     featured && (
-      <article class="card feature" data-fb-box>
-        <div class="frame" data-fb-frame>
-          <ProjectMedia media={featured.media} label={featured.name} />
+      <article class="card feature">
+        <div class="frame">
+          <ProjectMedia media={featured.media} />
         </div>
         <ProjectInfo project={featured} featured />
       </article>
@@ -26,9 +26,9 @@ const [featured, ...rest] = projects;
   <div class="grid">
     {
       rest.map((project) => (
-        <article class="card" data-fb-box data-fb-card data-fb-name={project.name}>
-          <div class="frame" data-fb-frame>
-            <ProjectMedia media={project.media} label={project.name} />
+        <article class="card">
+          <div class="frame">
+            <ProjectMedia media={project.media} />
           </div>
           <ProjectInfo project={project} />
         </article>

@@ -2,12 +2,12 @@
 import { roles, shortDate } from "../lib/experience";
 ---
 
-<section class="experience" id="experience" aria-labelledby="experience-title" data-fb-scene="experience" data-fb-name="Experience">
-  <h2 id="experience-title" data-fb="heading" data-fb-name="Heading">Experience</h2>
+<section class="experience" id="experience" aria-labelledby="experience-title">
+  <h2 id="experience-title">Experience</h2>
   <ol class="timeline">
     {
       roles.map((role) => (
-        <li class:list={["role", { now: role.to === null }]} data-fb="role" data-fb-name={role.org}>
+        <li class:list={["role", { now: role.to === null }]}>
           <p class="when">
             <time datetime={role.from}>{shortDate(role.from)}</time> –{" "}
             {role.to ? <time datetime={role.to}>{shortDate(role.to)}</time> : "Now"}

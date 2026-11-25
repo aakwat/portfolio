@@ -3,12 +3,9 @@ import type { Media } from "../lib/projects";
 
 interface Props {
   media: Media;
-  // Project name, for the Figma build's layer label.
-  label: string;
 }
 
-const { media, label } = Astro.props;
-const layer = `${label} / ${media.kind}`;
+const { media } = Astro.props;
 ---
 
 {
@@ -25,8 +22,6 @@ const layer = `${label} / ${media.kind}`;
       height={media.height}
       aria-hidden="true"
       data-autoplay
-      data-fb="media"
-      data-fb-name={layer}
     >
       <source src={`/projects/${media.name}.webm`} type="video/webm" />
       <source src={`/projects/${media.name}.mp4`} type="video/mp4" />
@@ -40,8 +35,6 @@ const layer = `${label} / ${media.kind}`;
       height={media.height}
       loading="lazy"
       decoding="async"
-      data-fb="media"
-      data-fb-name={layer}
     />
   )
 }

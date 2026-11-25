@@ -9,7 +9,7 @@ interface Props {
 const { project, featured = false } = Astro.props;
 ---
 
-<div class:list={["info", { featured }]} data-fb="info" data-fb-name={project.name}>
+<div class:list={["info", { featured }]}>
   <h3>
     {project.name}
     {project.badge && <span class="badge">{project.badge}</span>}

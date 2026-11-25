@@ -9,16 +9,16 @@ const links = [
 ];
 ---
 
-<header class="nav" data-fb-scene="nav" data-fb-name="Nav">
-  <a class="brand" href="/" data-fb="brand" data-fb-name="Name"><span class="first">Aung</span><span class="rest">Koko Lwin</span></a>
+<header class="nav">
+  <a class="brand" href="/"><span class="first">Aung</span><span class="rest">Koko Lwin</span></a>
   <nav aria-label="Main">
-    {links.map((link) => <a href={link.href} data-fb="link" data-fb-name={link.label}>{link.label}</a>)}
-    <button class="theme" type="button" aria-label="Switch theme" data-theme-toggle data-fb="toggle" data-fb-name="Theme">
+    {links.map((link) => <a href={link.href}>{link.label}</a>)}
+    <button class="theme" type="button" aria-label="Switch theme" data-theme-toggle>
       <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
       <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path></svg>
     </button>
-    <a class="cta" href="/#contact" data-fb="cta" data-fb-name="Button">Let's talk</a>
-    <button class="theme menu-button" type="button" popovertarget="nav-menu" aria-label="Menu" data-fb="toggle" data-fb-name="Menu">
+    <a class="cta" href="/#contact">Let's talk</a>
+    <button class="theme menu-button" type="button" popovertarget="nav-menu" aria-label="Menu">
       <svg class="bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"></path></svg>
       <svg class="cross" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
     </button>
