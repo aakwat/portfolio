@@ -1,5 +1,5 @@
 # Deny-by-default CSP; widen one directive at a time when a feature needs it.
-# Trusted Types: the site ships no client JS; drop these two if a script must set innerHTML.
+# Trusted Types: no script sets innerHTML; drop these two if one ever must.
 # img-src blob:: the nav's lens map, made in the page (src/scripts/glass/lens.ts) and read by an SVG filter.
 /*
   Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' blob:; media-src 'self'; font-src 'self'; connect-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'

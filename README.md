@@ -1,12 +1,14 @@
 # Portfolio
 
-Aung Koko Lwin's portfolio at `https://me.aungkokolwin.workers.dev`. Astro, static output, no client JS.
+Aung Koko Lwin's portfolio at `https://me.aungkokolwin.workers.dev`. Astro, static output, small client scripts only.
 
 - `src/pages/`: one file per route; `404.astro` is served for unknown paths
 - `src/components/Head.astro`: title, description, canonical, Open Graph and JSON-LD for every page
 - `src/lib/profile.ts`: name, role and links; copy must match `assets/resume.pdf`
 - `assets/`: served as-is (Astro `publicDir`), including `resume.pdf`
 - `assets/robots.txt`, `assets/sitemap.xml`: add every new page to the sitemap
+- `src/scripts/glass/`: liquid glass. WebGPU refracts the hero portrait and draws the rim light; the nav bends live
+  HTML through an SVG lens filter (Chromium only). Other browsers keep the CSS blur.
 - `assets/.well-known/security.txt`: renew `Expires` before 2027-11-03, or scanners treat it as invalid
 
 ## Security headers
