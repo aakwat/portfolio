@@ -1,0 +1,21 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.9.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "deploy": "astro build && wrangler deploy",
+    "test": "node --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@aakwat/liquid-glass": "workspace:*",
+    "astro": "^7.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^7.0.2"
+  }
+}

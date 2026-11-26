@@ -9,9 +9,8 @@ export interface GlassGPU {
   format: GPUTextureFormat;
 }
 
-// The look, shared by every pane; lens and thickness scale with the pane in drawGlass.
 const LOOK = { dispersion: 0.012, f0: 0.04, specPower: 32, edgeHighlight: 0.8, rimStrength: 0.05, fresnel: 0.3 };
-// Glass height in CSS px; fixed, so big panes keep the same thin bright edge as small ones.
+// CSS px; fixed, so big panes keep the same thin edge as small ones.
 const THICKNESS = 6;
 
 export async function startGPU(): Promise<GlassGPU | null> {
@@ -32,9 +31,7 @@ export async function startGPU(): Promise<GlassGPU | null> {
   return { device, pipeline, sampler, format };
 }
 
-// ponytail: builds and frees its GPU resources on every call; fine while panes redraw only on resize or theme
-// change, keep them per pane once something redraws every frame.
-// A null backdrop draws only the light on the glass; `size` is in device pixels and matches the backdrop's.
+// ponytail: GPU resources per call; keep them per pane once anything redraws every frame.
 export function drawGlass(
   gpu: GlassGPU,
   canvas: HTMLCanvasElement,

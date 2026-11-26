@@ -6,6 +6,7 @@ import Hero from "../components/Hero.astro";
 import Nav from "../components/Nav.astro";
 import Work from "../components/Work.astro";
 import { profile } from "../lib/profile";
+import "@aakwat/liquid-glass/style.css";
 import "../styles/global.css";
 ---
 
@@ -21,9 +22,9 @@ import "../styles/global.css";
       <Experience />
       <Contact />
     </main>
-    <!-- Once per page: glass panes live in both the nav and the hero. -->
     <script>
-      import "../scripts/glass/run";
+      import { startGlass } from "@aakwat/liquid-glass";
+      startGlass();
     </script>
   </body>
 </html>

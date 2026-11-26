@@ -1,11 +1,7 @@
-// Turns each [data-glass] pane into WebGPU liquid glass over the image its value names (an element id); an empty
-// value draws only the light on the glass, over the pane's own CSS blur.
-// Without WebGPU, or for visitors who asked for less transparency, panes keep their CSS look.
+// data-glass="<img id>": WebGPU refracts that image. data-glass="": SVG lens plus a WebGPU rim.
 import { composeBackdrop } from "./backdrop";
 import { startLens } from "./lens";
 import { drawGlass, startGPU, type GlassGPU } from "./render";
-
-const panes = [...document.querySelectorAll<HTMLElement>("[data-glass]")];
 
 function drawPane(gpu: GlassGPU, pane: HTMLElement): void {
   const canvas = pane.querySelector<HTMLCanvasElement>(":scope > canvas.glass-canvas");
@@ -33,7 +29,7 @@ function drawPane(gpu: GlassGPU, pane: HTMLElement): void {
   else off();
 }
 
-async function start(): Promise<void> {
+async function startPanes(panes: HTMLElement[]): Promise<void> {
   if (panes.length === 0 || matchMedia("(prefers-reduced-transparency: reduce)").matches) return;
   const gpu = await startGPU().catch(() => null);
   if (!gpu) return;
@@ -48,14 +44,16 @@ async function start(): Promise<void> {
       panes.forEach((pane) => drawPane(gpu, pane));
     });
   };
-  // Fires once on observe, which is the first draw.
+  // Fires once on observe: the first draw.
   const resized = new ResizeObserver(redraw);
   panes.forEach((pane) => resized.observe(pane));
-  // The backdrop repaints the page colour, so a theme switch needs a redraw.
+  // The backdrop includes the page colour.
   new MutationObserver(redraw).observe(document.documentElement, { attributeFilter: ["data-theme"] });
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
 }
 
-// The SVG lens needs no WebGPU, so it starts on its own.
-startLens();
-void start();
+// Call once, after the panes are in the page.
+export function startGlass(): void {
+  startLens();
+  void startPanes([...document.querySelectorAll<HTMLElement>("[data-glass]")]);
+}

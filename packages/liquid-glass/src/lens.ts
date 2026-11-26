@@ -1,20 +1,14 @@
-// Refraction of live HTML: a pane's backdrop is bent by an SVG displacement filter (only Chromium applies SVG
-// filters in backdrop-filter), driven by a lens map built here with the shader's lens shape. The map reaches the
-// filter as a blob: URL, which the CSP's img-src allows (assets/_headers).
-// Each pane is tuned in CSS with --glass-bend (rim pull, px) and --glass-blur (softness, px); see global.css.
+// Bends live HTML through an SVG displacement backdrop-filter (Chromium only); maps load as blob: URLs.
 
-// How far in from the edge the WebGPU lens curves, as a share of the pane's shorter half.
 export const LENS_REACH = 0.6;
 
-// Inigo Quilez's rounded box, as in shader.ts: negative inside, positive outside.
 function edgeDistance(x: number, y: number, halfW: number, halfH: number, radius: number): number {
   const qx = Math.abs(x) - halfW + radius;
   const qy = Math.abs(y) - halfH + radius;
   return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - radius;
 }
 
-// Inward shift in CSS px for the point (x, y) from the pane's centre: the whole lens width at the edge, none on the
-// flat top. flatTop is the shader's profile power: lower keeps the top flatter and the bend tighter to the rim.
+// Inward shift (CSS px) at (x, y) from the centre: the whole lens at the edge, none on the flat top.
 export function lensPull(
   x: number,
   y: number,
@@ -37,11 +31,10 @@ export function lensPull(
   return [(-gx / length) * pull, (-gy / length) * pull];
 }
 
-// SVG lenses use a softer profile than the hero shader: the bend spreads over a wider, visibly rounded edge.
+// Softer than the shader's 0.25, so the bend spreads over a rounder edge.
 const SVG_FLAT_TOP = 0.5;
 
-// RGBA bytes for feDisplacementMap: red shifts x, green shifts y, 127.5 is no shift, and 0..255 spans ±lens,
-// so the filter's scale is 2 × lens.
+// R = x shift, G = y shift, 127.5 = none; 0..255 spans ±lens, so the filter scale is 2 × lens.
 export function lensMap(width: number, height: number, radius: number, lens: number): Uint8ClampedArray<ArrayBuffer> {
   const data = new Uint8ClampedArray(width * height * 4);
   for (let row = 0; row < height; row++) {
@@ -71,7 +64,7 @@ function svg(tag: string, attributes: Record<string, string>): SVGElement {
   return element;
 }
 
-// One filter per pane, in a shared zero-size <svg>; sRGB, so the map's bytes are read as-is.
+// sRGB, so the map's bytes are read as-is.
 function lensFor(pane: HTMLElement, defs: SVGElement): Lens {
   const known = lenses.get(pane);
   if (known) return known;
@@ -118,7 +111,6 @@ async function paintLens(pane: HTMLElement, defs: SVGElement): Promise<void> {
   pane.dataset.lensLive = "";
 }
 
-// Panes with an empty data-glass bend the live page; they get data-lens-live once their filter is ready.
 export function startLens(): void {
   // userAgentData exists only in Chromium, the one engine that applies url() in backdrop-filter.
   if (!("userAgentData" in navigator) || matchMedia("(prefers-reduced-transparency: reduce)").matches) return;
@@ -126,7 +118,7 @@ export function startLens(): void {
   if (panes.length === 0) return;
   const defs = svg("svg", { class: "lens-defs", "aria-hidden": "true" });
   document.body.append(defs);
-  // Fires once on observe, which paints the first map; the map must match the pane's size, so resizes repaint.
+  // Fires once on observe; the map must match the pane's size.
   const resized = new ResizeObserver((entries) => {
     for (const entry of entries) if (entry.target instanceof HTMLElement) void paintLens(entry.target, defs);
   });

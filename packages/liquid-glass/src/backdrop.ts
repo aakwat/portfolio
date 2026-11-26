@@ -1,5 +1,4 @@
-// What sits behind a glass pane, drawn by hand into a canvas: the CSP blocks DOM-capture libraries, and the GPU
-// can only read pictures, so the page background and one photo are repainted the way CSS shows them.
+// The GPU reads only images, so what CSS shows behind a pane is repainted into a canvas.
 
 export interface Size {
   width: number;
@@ -11,7 +10,7 @@ export interface Rect extends Size {
   y: number;
 }
 
-// Part of the image that object-fit: cover shows, with object-position given as fractions (0.5 = centred).
+// posX, posY: object-position as fractions (0.5 = centred).
 export function coverSource(natural: Size, box: Size, posX: number, posY: number): Rect {
   const scale = Math.max(box.width / natural.width, box.height / natural.height);
   const width = box.width / scale;
@@ -19,15 +18,18 @@ export function coverSource(natural: Size, box: Size, posX: number, posY: number
   return { x: (natural.width - width) * posX, y: (natural.height - height) * posY, width, height };
 }
 
-// "50% 25%" -> [0.5, 0.25]; keywords and lengths fall back to centred.
+// Keywords and lengths fall back to centred.
 export function objectPosition(value: string): [number, number] {
   const [x = "", y = ""] = value.split(" ");
   const fraction = (part: string) => (part.endsWith("%") ? Number.parseFloat(part) / 100 : 0.5);
   return [fraction(x), fraction(y)];
 }
 
-// Matches the phone mask on the hero photo (Hero.astro): opaque to 70%, then fading out.
-const FADE_FROM = 0.7;
+// First stop of a top-to-bottom fade, e.g. linear-gradient(#000 70%, transparent).
+export function fadeFrom(maskImage: string): number {
+  const percent = /(\d+(?:\.\d+)?)%/.exec(maskImage)?.[1];
+  return percent === undefined ? 0 : Number.parseFloat(percent) / 100;
+}
 
 function photoLayer(photo: HTMLImageElement, box: DOMRect, dpr: number): HTMLCanvasElement | null {
   const layer = document.createElement("canvas");
@@ -40,11 +42,12 @@ function photoLayer(photo: HTMLImageElement, box: DOMRect, dpr: number): HTMLCan
   const src = coverSource({ width: photo.naturalWidth, height: photo.naturalHeight }, box, posX, posY);
   ctx.filter = style.filter;
   ctx.drawImage(photo, src.x, src.y, src.width, src.height, 0, 0, layer.width, layer.height);
+  // ponytail: top-to-bottom fades only; parse the full gradient if other masks appear.
   if (style.maskImage && style.maskImage !== "none") {
     ctx.filter = "none";
     ctx.globalCompositeOperation = "destination-in";
     const fade = ctx.createLinearGradient(0, 0, 0, layer.height);
-    fade.addColorStop(FADE_FROM, "#000");
+    fade.addColorStop(fadeFrom(style.maskImage), "#000");
     fade.addColorStop(1, "rgba(0, 0, 0, 0)");
     ctx.fillStyle = fade;
     ctx.fillRect(0, 0, layer.width, layer.height);
@@ -52,7 +55,6 @@ function photoLayer(photo: HTMLImageElement, box: DOMRect, dpr: number): HTMLCan
   return layer;
 }
 
-// The area under `pane`, at `dpr` device pixels per CSS pixel.
 export function composeBackdrop(pane: DOMRect, photo: HTMLImageElement, dpr: number): HTMLCanvasElement | null {
   const canvas = document.createElement("canvas");
   canvas.width = Math.max(1, Math.round(pane.width * dpr));

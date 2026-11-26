@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { lensPull } from "../src/scripts/glass/lens.ts";
+import { lensPull } from "../src/lens.ts";
 
 test("the rim pulls inward by at most the lens width; the flat top stays put", () => {
   const [, edge] = lensPull(0, 29.5, 200, 60, 30, 18);

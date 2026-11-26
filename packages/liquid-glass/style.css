@@ -1,0 +1,48 @@
+/* Knobs, overridable per pane. See README. */
+.glass {
+  --glass-tint: color-mix(in srgb, Canvas 25%, transparent); /* colour laid over the glass */
+  --glass-blur: 0.5px; /* softness behind a lens pane */
+  --glass-bend: 32px; /* how far a lens pane's rim pulls the page inward */
+  isolation: isolate;
+}
+.lens-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+.glass-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  visibility: hidden;
+}
+/* Doubled class: outranks a component's scoped fallback look (one class plus its scope attribute). */
+.glass.glass[data-glass-live] {
+  border-color: transparent;
+}
+.glass.glass[data-glass-live]:not([data-glass=""]) {
+  background: none;
+  backdrop-filter: none;
+}
+/* --glass-lens is set by lens.ts. */
+.glass.glass[data-lens-live] {
+  background: var(--glass-tint);
+  backdrop-filter: var(--glass-lens);
+}
+.glass[data-glass-live] > .glass-canvas {
+  visibility: visible;
+}
+/* After the canvas, under the text. */
+.glass[data-glass-live]:not([data-glass=""])::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--glass-tint);
+  pointer-events: none;
+}

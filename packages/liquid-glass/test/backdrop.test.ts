@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { coverSource, objectPosition } from "../src/scripts/glass/backdrop.ts";
+import { coverSource, objectPosition } from "../src/backdrop.ts";
 
 test("cover crops the long side and keeps the short side whole", () => {
   // A square photo in a tall box shows its full height and a centred strip of its width.

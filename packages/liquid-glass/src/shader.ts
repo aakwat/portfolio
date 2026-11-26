@@ -1,9 +1,6 @@
 /*
  * Liquid glass shader, adapted from https://github.com/arya3d/liquid-glass-webgpu
  * Copyright (c) 2026 arya3d. MIT License: https://opensource.org/license/mit
- * Changes: works in canvas pixels for any pane size, normals come from the lens height (so the rim catches light),
- * output is premultiplied alpha so the page shows past the rounded corners, and refraction 0 draws only the
- * light on the glass, for panes whose backdrop the GPU cannot see.
  */
 export const GLASS_SHADER = /* wgsl */ `
 struct Glass {
@@ -70,7 +67,7 @@ fn sample_backdrop(p: vec2f) -> vec4f {
     return textureSampleLevel(backdrop, backdrop_sampler, p / glass.size + 0.5, 0.0);
 }
 
-// Each channel reads closer to the centre near the rim, blue a little more than red.
+// Blue bends a little more than red.
 fn refract_backdrop(p: vec2f, bend: f32, spread: f32) -> vec3f {
     let lookup = p * sin(bend);
     let offset = lookup * spread;
@@ -102,7 +99,6 @@ fn frag_main(@builtin(position) coord: vec4f) -> @location(0) vec4f {
     let opacity = smoothstep(0.0, 1.0, mask);
 
     if (glass.refraction < 0.5) {
-        // White light only, over whatever CSS shows beneath.
         let light = min((edge_light + shine + rim) * (1.0 + fresnel * glass.fresnel), 1.0) * opacity;
         return vec4f(light, light, light, light);
     }

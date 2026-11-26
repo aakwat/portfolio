@@ -1,0 +1,29 @@
+@import "./tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  /* One real weight: never smear a fake bold. */
+  font-synthesis-weight: none;
+  line-height: 1.6;
+}
+.narrow {
+  max-width: 40rem;
+  margin: 4rem auto;
+  padding: 0 1.25rem;
+}
+a {
+  color: inherit;
+}
+
+/* In-page links (Work, Let's talk) glide instead of jumping; never for visitors who asked for less motion. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}

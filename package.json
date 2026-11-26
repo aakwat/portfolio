@@ -1,21 +1,13 @@
 {
-  "name": "portfolio",
+  "name": "portfolio-workspace",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.9.0",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "deploy": "astro build && wrangler deploy",
-    "test": "node --test tests/*.test.ts"
-  },
-  "dependencies": {
-    "astro": "^7.4.4"
-  },
-  "devDependencies": {
-    "@astrojs/check": "^0.9.12",
-    "@webgpu/types": "^0.1.66",
-    "typescript": "^7.0.2"
+    "dev": "pnpm --filter portfolio dev",
+    "build": "pnpm --filter portfolio build",
+    "preview": "pnpm --filter portfolio preview",
+    "deploy": "pnpm --filter portfolio run deploy",
+    "test": "pnpm --recursive test"
   }
 }

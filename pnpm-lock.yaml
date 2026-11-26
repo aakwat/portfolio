@@ -164,8 +164,13 @@ settings:
 
 importers:
 
-  .:
+  .: {}
+
+  apps/portfolio:
     dependencies:
+      '@aakwat/liquid-glass':
+        specifier: workspace:*
+        version: link:../../packages/liquid-glass
       astro:
         specifier: ^7.4.4
         version: 7.4.4(yaml@2.9.1)
@@ -173,12 +178,15 @@ importers:
       '@astrojs/check':
         specifier: ^0.9.12
         version: 0.9.12(@emnapi/runtime@1.11.3)(prettier@3.9.10)(typescript@7.0.2)
-      '@webgpu/types':
-        specifier: ^0.1.66
-        version: 0.1.74
       typescript:
         specifier: ^7.0.2
         version: 7.0.2
+
+  packages/liquid-glass:
+    devDependencies:
+      '@webgpu/types':
+        specifier: ^0.1.66
+        version: 0.1.74
 
 packages:
 
