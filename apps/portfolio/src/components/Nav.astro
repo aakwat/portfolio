@@ -20,22 +20,22 @@ const links = [
     </button>
     <a class="cta" href="/#contact">Let's talk</a>
     <button class="theme menu-button" type="button" popovertarget="nav-menu" aria-label="Menu">
-      <svg class="bars" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h10"></path></svg>
-      <svg class="cross" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      <svg class="burger" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h16"></path></svg>
     </button>
+    <span class="glass glass-drop" data-glass="" aria-hidden="true"></span>
   </nav>
   <!-- Phone menu: a native popover, so Esc and a tap outside close it with no script. -->
   <div class="menu glass" id="nav-menu" popover data-glass="">
     <canvas class="glass-canvas" aria-hidden="true"></canvas>
     <a href="/#contact">Let's talk</a>
     {links.map((link) => <a href={link.href}>{link.label}</a>)}
-    <span class="drop glass" data-glass="" aria-hidden="true"><canvas class="glass-canvas"></canvas></span>
+    <span class="glass glass-drop" data-glass="" aria-hidden="true"></span>
   </div>
 </header>
 
 <style>
   /* A floating glass capsule that stays on screen; sticky, so the page below never jumps under it. The blur
-     shows text through it; WebGPU (scripts/glass) adds the rim light. */
+     shows text through it; WebGPU adds the rim light. */
   .nav {
     position: sticky;
     top: 0.75rem;
@@ -49,8 +49,9 @@ const links = [
     border-radius: 999px;
     background: color-mix(in srgb, var(--bg) 60%, transparent);
     backdrop-filter: blur(16px) saturate(1.6);
-    --glass-tint: color-mix(in srgb, var(--bg) 12%, transparent);
-    --glass-blur: 2px;
+    /* Dense enough that the name stays readable over the bright hero photo. */
+    --glass-tint: color-mix(in srgb, var(--bg) 45%, transparent);
+    --glass-blur: 3px;
   }
   /* Wordmark: bold serif first name, italic family name tucked under its right edge. */
   .brand {
@@ -82,6 +83,7 @@ const links = [
     outline-offset: 2px;
   }
   nav {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 1.5rem;
@@ -150,13 +152,34 @@ const links = [
     }
   }
 
-  .menu-button,
-  .cross,
-  :global(.nav:has(.menu:popover-open)) .bars {
+  .menu-button {
     display: none;
   }
-  :global(.nav:has(.menu:popover-open)) .cross {
-    display: block;
+  /* Hamburger to X; matching transform lists on both ends keep the tween smooth. */
+  .burger path {
+    transform-box: view-box;
+    transform-origin: 12px 12px;
+    transition:
+      transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1),
+      opacity 200ms;
+  }
+  .burger path:nth-child(3) {
+    transform: rotate(0) translate(-3px, 0) scale(0.625, 1);
+  }
+  :global(.nav:has(.menu:popover-open)) .burger path:nth-child(1) {
+    transform: rotate(45deg) translate(0, 5px);
+  }
+  :global(.nav:has(.menu:popover-open)) .burger path:nth-child(2) {
+    opacity: 0;
+    transform: scale(0, 1);
+  }
+  :global(.nav:has(.menu:popover-open)) .burger path:nth-child(3) {
+    transform: rotate(-45deg) translate(0, -5px) scale(1, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .burger path {
+      transition: none;
+    }
   }
   .menu {
     inset: 5.25rem 1rem auto auto;
@@ -187,37 +210,6 @@ const links = [
   .menu a:focus-visible {
     outline: 2px solid var(--fg);
     outline-offset: -2px;
-  }
-  /* A glass droplet that follows hover, focus and touch across the items (scripts/nav-menu.ts sets --drop-y) and
-     swells while pressed, like an iOS menu. It comes after the links, so its lens bends the label under it. */
-  .drop {
-    position: absolute;
-    top: 0;
-    left: 0.375rem;
-    right: 0.375rem;
-    height: 44px;
-    border-radius: 999px;
-    background: color-mix(in srgb, var(--fg) 8%, transparent);
-    pointer-events: none;
-    translate: 0 var(--drop-y, 0.375rem);
-    /* A spring: overshoots a little, then settles. */
-    transition:
-      translate 420ms linear(0, 0.1 6%, 0.54 19%, 0.85 31%, 0.97 42%, 1.015 55%, 1.017 64%, 1),
-      scale 160ms ease-out;
-    --glass-tint: color-mix(in srgb, var(--fg) 6%, transparent);
-    --glass-blur: 0px;
-    --glass-bend: 14px;
-  }
-  .menu[data-pressed] .drop {
-    scale: 1.06;
-  }
-  .menu[data-snap] .drop {
-    transition: none;
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .drop {
-      transition: none;
-    }
   }
 
   /* Phones: name, theme and a menu button; every link moves into the menu. */

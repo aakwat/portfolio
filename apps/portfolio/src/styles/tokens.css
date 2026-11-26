@@ -12,8 +12,8 @@
 
   --radius-control: 10px;
   --radius-card: 20px;
-  /* Site font: the visitor's own monospace, so nothing downloads. */
-  --font: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  /* Site font: the platform's UI font (SF Pro on Apple), so nothing downloads. */
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   /* Display serif for the A U N G letters only; no web font is downloaded. */
   --serif: Didot, "Bodoni 72", "Bodoni Moda", "Playfair Display", "Noto Serif Display", "Noto Serif", Georgia, serif;
 

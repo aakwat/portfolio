@@ -20,6 +20,18 @@ Panes must be positioned (`relative`, `absolute`, `sticky`…) and should carry 
 (`backdrop-filter: blur(…)`, a border), which stays when the glass can't run: no WebGPU, Firefox or Safari for the
 lens, or `prefers-reduced-transparency`.
 
+## Droplet
+
+A glass pill that follows hover, focus and a sliding finger across a bar or menu, and swells while pressed:
+
+```ts
+import { attachDrop } from "@aakwat/liquid-glass";
+attachDrop(navElement, "a, button");
+```
+
+Put `<span class="glass glass-drop" data-glass="" aria-hidden="true"></span>` inside the container, which must be
+positioned. `{ rest: true }` keeps it visible after the pointer leaves.
+
 ## Knobs
 
 Set on any pane in CSS:

@@ -46,3 +46,40 @@
   background: var(--glass-tint);
   pointer-events: none;
 }
+/* Droplet (attachDrop): drop.ts sets its box; a spring that overshoots a little, then settles. */
+.glass-drop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--drop-w, 0);
+  height: var(--drop-h, 0);
+  translate: var(--drop-x, 0) var(--drop-y, 0);
+  border-radius: 999px;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  --glass-tint: color-mix(in srgb, currentColor 6%, transparent);
+  --glass-blur: 0px;
+  --glass-bend: 12px;
+  --spring: linear(0, 0.1 6%, 0.54 19%, 0.85 31%, 0.97 42%, 1.015 55%, 1.017 64%, 1);
+  transition:
+    translate 420ms var(--spring),
+    width 420ms var(--spring),
+    height 420ms var(--spring),
+    scale 160ms ease-out,
+    opacity 160ms;
+}
+[data-drop-on] > .glass-drop {
+  opacity: 1;
+}
+[data-drop-pressed] > .glass-drop {
+  scale: 1.06;
+}
+[data-drop-snap] > .glass-drop {
+  transition: opacity 160ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass-drop {
+    transition: opacity 160ms;
+  }
+}

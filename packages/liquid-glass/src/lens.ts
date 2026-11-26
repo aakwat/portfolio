@@ -57,6 +57,8 @@ interface Lens {
 
 const SVG = "http://www.w3.org/2000/svg";
 const lenses = new WeakMap<HTMLElement, Lens>();
+// Size each pane's map was last painted at; droplets resize every frame while they glide.
+const painted = new WeakMap<HTMLElement, string>();
 
 function svg(tag: string, attributes: Record<string, string>): SVGElement {
   const element = document.createElementNS(SVG, tag);
@@ -87,8 +89,11 @@ async function paintLens(pane: HTMLElement, defs: SVGElement): Promise<void> {
   const height = Math.round(rect.height);
   if (width === 0 || height === 0) {
     delete pane.dataset.lensLive;
+    painted.delete(pane);
     return;
   }
+  const size = `${width}x${height}`;
+  if (painted.get(pane) === size) return;
   const style = getComputedStyle(pane);
   const lens = Math.min(Number.parseFloat(style.getPropertyValue("--glass-bend")) || 0, width / 2, height / 2);
   if (lens <= 0) return;
@@ -108,6 +113,7 @@ async function paintLens(pane: HTMLElement, defs: SVGElement): Promise<void> {
   shift.setAttribute("scale", String(2 * lens));
   soft.setAttribute("stdDeviation", String(Number.parseFloat(style.getPropertyValue("--glass-blur")) || 0));
   if (previous?.startsWith("blob:")) URL.revokeObjectURL(previous);
+  painted.set(pane, size);
   pane.dataset.lensLive = "";
 }
 

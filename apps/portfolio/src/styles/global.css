@@ -3,6 +3,10 @@
 * {
   box-sizing: border-box;
 }
+/* No flash on tap; controls give their own feedback. */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
 body {
   margin: 0;
   background: var(--bg);

@@ -3,6 +3,8 @@ import { composeBackdrop } from "./backdrop";
 import { startLens } from "./lens";
 import { drawGlass, startGPU, type GlassGPU } from "./render";
 
+export { attachDrop, type Drop } from "./drop";
+
 function drawPane(gpu: GlassGPU, pane: HTMLElement): void {
   const canvas = pane.querySelector<HTMLCanvasElement>(":scope > canvas.glass-canvas");
   const id = pane.dataset.glass ?? "";
