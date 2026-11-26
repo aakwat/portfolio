@@ -14,14 +14,22 @@ function edgeDistance(x: number, y: number, halfW: number, halfH: number, radius
 }
 
 // Inward shift in CSS px for the point (x, y) from the pane's centre: the whole lens width at the edge, none on the
-// flat top, with the shader's flat-topped profile in between.
-export function lensPull(x: number, y: number, width: number, height: number, radius: number, lens: number): [number, number] {
+// flat top. flatTop is the shader's profile power: lower keeps the top flatter and the bend tighter to the rim.
+export function lensPull(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+  lens: number,
+  flatTop = 0.25,
+): [number, number] {
   const halfW = width / 2;
   const halfH = height / 2;
   const r = Math.min(radius, halfW, halfH);
   const d = edgeDistance(x, y, halfW, halfH, r);
   if (d >= 0) return [0, 0];
-  const bend = Math.pow(Math.min(-d / lens, 1), 0.25) * 1.57;
+  const bend = Math.pow(Math.min(-d / lens, 1), flatTop) * 1.57;
   const pull = lens * (1 - Math.sin(bend));
   const gx = edgeDistance(x + 0.5, y, halfW, halfH, r) - edgeDistance(x - 0.5, y, halfW, halfH, r);
   const gy = edgeDistance(x, y + 0.5, halfW, halfH, r) - edgeDistance(x, y - 0.5, halfW, halfH, r);
@@ -29,13 +37,16 @@ export function lensPull(x: number, y: number, width: number, height: number, ra
   return [(-gx / length) * pull, (-gy / length) * pull];
 }
 
+// SVG lenses use a softer profile than the hero shader: the bend spreads over a wider, visibly rounded edge.
+const SVG_FLAT_TOP = 0.5;
+
 // RGBA bytes for feDisplacementMap: red shifts x, green shifts y, 127.5 is no shift, and 0..255 spans ±lens,
 // so the filter's scale is 2 × lens.
 export function lensMap(width: number, height: number, radius: number, lens: number): Uint8ClampedArray<ArrayBuffer> {
   const data = new Uint8ClampedArray(width * height * 4);
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
-      const [dx, dy] = lensPull(col + 0.5 - width / 2, row + 0.5 - height / 2, width, height, radius, lens);
+      const [dx, dy] = lensPull(col + 0.5 - width / 2, row + 0.5 - height / 2, width, height, radius, lens, SVG_FLAT_TOP);
       const i = (row * width + col) * 4;
       data[i] = 127.5 + (dx / (2 * lens)) * 255;
       data[i + 1] = 127.5 + (dy / (2 * lens)) * 255;
